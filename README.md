@@ -120,4 +120,5 @@ $W = W - \alpha\frac{\partial{L}}{\partial{W}}$  with $\frac{\partial{L}}{\parti
 - $b = b - \alpha\frac{\partial{L}}{\partial{b}}$  with $\frac{\partial{L}}{\partial{b}}=\frac{1}{m}(A-y)$
 
 > [!NOTE]  
-> You might wonder why do we use the transpose of the matrix? To have the explanation develop this expression $\frac{\partial{L}}{\partial{W}}=\begin{bmatrix} \frac{\partial{L}}{\partial{w_1}} \\ \vdots \\ \frac{\partial{L}}{\partial{w_n}}\end{bmatrix}$
+> You might wonder why do we use the transpose of the matrix? To have the explanation develop this expression
+$\frac{\partial{L}}{\partial{W}}=\begin{bmatrix} \frac{\partial{L}}{\partial{w_1}} \\ \vdots \\ \frac{\partial{L}}{\partial{w_n}}\end{bmatrix}$
