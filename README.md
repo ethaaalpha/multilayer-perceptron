@@ -27,13 +27,12 @@ $a(z)=\frac{1}{1+e^-z}$
 FAIRE UN DESSIN AVEC LA FONCTION SIGMOIDE
 
 #### log loss function
-The function to calculate the maximum of likelihood is represented by $L=\prod_{i=0}^m a_{i}^{a_y}*(1-a_i)^{1-y_i}$, it is the sum of your probabilities.  
-The issue is that the number will tend towards 0 due to multiplication of number between [0, 1].  
-To avoid this problem we will use the $\log$ and use [logarithms](https://en.wikipedia.org/wiki/Logarithm) attributes.  
-At this moment, this function have a maximum that represent the *best of the likelihood*.  
-If we expand and simplify this function it will be $LL$
+The function to calculate likelihood of our model is represented by $L=\prod_{i=1}^m a_{i}^{a_y}*(1-a_i)^{1-y_i}$, it is the sum of your probabilities.  
+The issue is that the number will tend towards 0 due to the multiplication of a number between [0, 1].  
+To avoid this problem, we will use the $\log$ and use [logarithms](https://en.wikipedia.org/wiki/Logarithm) attributes.  
+If apply the log, expand and simplify this function it will be $LL$
 
-$LL=-\frac{1} {m}\sum_{i=0}^m y_i\log(a_i)+(1-y_i)\log(1-a_i)$
+$LL=-\frac{1} {m}\sum_{i=1}^m y_i\log(a_i)+(1-y_i)\log(1-a_i)$
 
 You might wonder what is the $-\frac{1}{m}$ it is because we can't maximise a function in maths. So instead of trying to maximise $L$ we are going to minimise $-L$, which is the same thing.  
 The division by m is just there to do some normalization of our result.  
@@ -51,8 +50,74 @@ This involves to calculate the derivative of Log Loss.
 > You should do a linear regression before starting this project
 
 ### derivated functions
-Few links to understand some tips about derivative and maths :
+
+#### calculations
+As the **chain rule** we can express:  
+- $\frac{\partial{L}}{\partial{w_1}}=\frac{\partial{L}}{\partial{a}}*\frac{\partial{a}}{\partial{z}}*\frac{\partial{z}}{\partial{w_1}}$  
+- $\frac{\partial{L}}{\partial{w_2}}=\frac{\partial{L}}{\partial{a}}*\frac{\partial{a}}{\partial{z}}*\frac{\partial{z}}{\partial{w_2}}$  
+- $\frac{\partial{L}}{\partial{b}}=\frac{\partial{L}}{\partial{a}}*\frac{\partial{a}}{\partial{z}}*\frac{\partial{z}}{\partial{b}}$  
+
+As you see this is the last derivative that is changing depending on the variable.  
+We can calculate few derivatives:  
+- $\frac{\partial{L}}{\partial{a}}=\frac{y}{a}-\frac{1-y}{1-a}$
+- $\frac{\partial{a}}{\partial{z}}=\frac{e^{-z}}{(1+^{-z})^2}=\frac{1}{(1+e^{-z})}*\frac{e^{-z}}{(1+e^{-z})}=a(1-a)$
+- $\frac{\partial{z}}{\partial{w_1}}=x_1$
+- $\frac{\partial{z}}{\partial{w_2}}=x_2$
+- $\frac{\partial{z}}{\partial{b}}=1$
+
+If we combine everything together we obtain:  
+- $\frac{\partial{L}}{\partial{w_1}}=\frac{1}{m}\sum_{i=1}^m(a_i-y_i)x_1$
+- $\frac{\partial{L}}{\partial{w_2}}=\frac{1}{m}\sum_{i=1}^m(a_i-y_i)x_2$
+- $\frac{\partial{L}}{\partial{b}}=\frac{1}{m}\sum_{i=1}^m(a_i-y_i)$  
+Where $a_i$ is the value predicted for $i$, and $y_i$ the real one.  
+
+#### gradient
+If we apply the gradient descent formula, then we have:  
+- $w_1 = w_1 - \alpha\frac{\partial{L}}{\partial{w_1}}$  
+- $w_2 = w_2 - \alpha\frac{\partial{L}}{\partial{w_2}}$  
+- $b = b - \alpha\frac{\partial{L}}{\partial{b}}$  
+
+<ins>Few links to understand some tips about derivative and maths :</ins>
 - [Chain Rule](https://en.wikipedia.org/wiki/Chain_rule)
 - [Derivative](https://en.wikipedia.org/wiki/Derivative)
 - [List usuals derivatives](http://dossierslmm.chez-alice.fr/fiche/tableaux_derivees.pdf)]
 
+### vectorisations
+Once we calculated every function that we need for our perceptron we might think of how vectorize it.  
+*Why you could tell me ?* Because it will simplificate our calculations.  
+For the moment we need to treat every data in a "for loop" and iterate over each index. But it is long and it cost us a lot of computation.  
+To avoid this problem can vectorize our functions and data to treat them at the same time.  
+
+> [!NOTE]
+> In fact this is faster because numpy implements vectorizations with the arrays object in C.  
+> In raw python you'll have to iterate over each element using a for loop.  
+
+> [!TIP]
+> Vectorization is made by using [matrix](https://en.wikipedia.org/wiki/Matrix_(mathematics)).  
+
+#### dataset
+The vectorization of our dataset can be represented by:
+$X=\begin{bmatrix} x_1^{(1)} & \cdots & x_n^{(1)} \\ \vdots & \ddots & \vdots \\ x_1^{(m)} & \cdots & x_n^{(m)} \end{bmatrix}$ with $m$ the number of data **(entries)** and $n$ the number of variables **(features)**.  
+Also, $y=\begin{bmatrix} y_1^{(1)} \\ \vdots \\ y_n^{(m)}\end{bmatrix}$ that represent our true responses and what we will use to validate the predictions. 
+
+
+#### z function
+We can also vectorize the $z$ function. If we decompose we have 2 others matrix:  
+$W=\begin{bmatrix} w_1 \\ \vdots \\ w_n\end{bmatrix}$ and $b=\begin{bmatrix} b \\ \vdots \\ b\end{bmatrix}$ 
+
+Then, $Z=X*W+b$
+
+#### a function
+For this one this is simple: $a=\frac{1}{1+e^{-Z}}$, we just reuse of $Z$ matrix and applying to it the sigmoide function.
+
+#### LogLoss function
+It is also simple for this one, we just need to reuse our vectors: $L=-\frac{1} {m}\sum_{i=1}^m Y\log(A)+(1-Y)\log(1-A)$  
+
+#### gradients
+Since we have $X$ that contain every variable we can also put every weights inside a vector:  
+$W = W - \alpha\frac{\partial{L}}{\partial{W}}$  with $\frac{\partial{L}}{\partial{W}}=\frac{1}{m}X^T*(A-y)$  
+
+- $b = b - \alpha\frac{\partial{L}}{\partial{b}}$  with $\frac{\partial{L}}{\partial{b}}=\frac{1}{m}(A-y)$
+
+> [!NOTE]  
+> You might wonder why do we use the transpose of the matrix? To have the explanation develop this expression $\frac{\partial{L}}{\partial{W}}=\begin{bmatrix} \frac{\partial{L}}{\partial{w_1}} \\ \vdots \\ \frac{\partial{L}}{\partial{w_n}}\end{bmatrix}$
