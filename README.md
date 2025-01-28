@@ -53,9 +53,9 @@ This involves to calculate the derivative of Log Loss.
 
 #### calculations
 As the **chain rule** we can express:  
-- $ \frac{\partial{L}}{\partial{w_1}}=\frac{\partial{L}}{\partial{a}}*\frac{\partial{a}}{\partial{z}}*\frac{\partial{z}}{\partial{w_1} }$  
-- $ \frac{\partial{L}}{\partial{w_2}}=\frac{\partial{L}}{\partial{a}}*\frac{\partial{a}}{\partial{z}}*\frac{\partial{z}}{\partial{w_2}} $  
-- $ \frac{\partial{L}}{\partial{b}}=\frac{\partial{L}}{\partial{a}}*\frac{\partial{a}}{\partial{z}}*\frac{\partial{z}}{\partial{b}} $  
+- $\frac{\partial{L}}{\partial{w_1}} = \frac{\partial{L}}{\partial{a}} * \frac{\partial{a}}{\partial{z}} * \frac{\partial{z}}{\partial{w_1}}$  
+- $\frac{\partial{L}}{\partial{w_2}} = \frac{\partial{L}}{\partial{a}} * \frac{\partial{a}}{\partial{z}} * \frac{\partial{z}}{\partial{w_2}}$  
+- $\frac{\partial{L}}{\partial{b}} = \frac{\partial{L}}{\partial{a}} * \frac{\partial{a}}{\partial{z}} * \frac{\partial{z}}{\partial{b}}$  
 
 As you see this is the last derivative that is changing depending on the variable.  
 We can calculate few derivatives:  
@@ -95,29 +95,15 @@ To avoid this problem can vectorize our functions and data to treat them at the 
 > [!TIP]
 > Vectorization is made by using [matrix](https://en.wikipedia.org/wiki/Matrix_(mathematics)).  
 
-#### dataset
-The vectorization of our dataset can be represented by:
-$X=\begin{bmatrix} x_1^{(1)} & \cdots & x_n^{(1)} \\ \vdots & \ddots & \vdots \\ x_1^{(m)} & \cdots & x_n^{(m)} \end{bmatrix}$ with $m$ the number of data **(entries)** and $n$ the number of variables **(features)**.  
-Also, $y=\begin{bmatrix} y_1^{(1)} \\ \vdots \\ y_n^{(m)}\end{bmatrix}$ that represent our true responses and what we will use to validate the predictions. 
+| Name | Vector(s) | Informations |
+| - | - | - |
+| dataset | $` X=\begin{bmatrix} x_1^{(1)} & \cdots & x_n^{(1)} \\ \vdots & \ddots & \vdots \\ x_1^{(m)} & \cdots & x_n^{(m)} \end{bmatrix} `$ <br><br>$`Y=\begin{bmatrix} y_1^{(1)} \\ \vdots \\ y_n^{(m)}\end{bmatrix}`$ | $X$ the dataset, $Y$ the expected output corresponding (used for validation). $m$ is the number of data **(entries)** and $n$ the number of variables **(features)**. |
+| $z(x_1, x_2)$ | $`W=\begin{bmatrix} w_1 \\ \vdots \\ w_n\end{bmatrix}$ and $b=\begin{bmatrix} b \\ \vdots \\ b\end{bmatrix}`$ <br> <br> $Z=X*W+b$ | $W$ the vector of each weights, $b$ for each *bias*. |
+| $a(z)$ | $a=\frac{1}{1+e^{-Z}}$ | We just reuse of $Z$ matrix and applying to it the sigmoide function. |
+| $LogLoss$ | $L=-\frac{1} {m}\sum_{i=1}^m Y\log(A)+(1-Y)\log(1-A)$ | Reuse of the previous matrixes. |
+| gradients | $W = W - \alpha\frac{\partial{L}}{\partial{W}}$ <br><br> $b = b - \alpha\frac{\partial{L}}{\partial{b}}$ | with $\frac{\partial{L}}{\partial{W}}=\frac{1}{m}X^T*(A-y)$ <br> <br> with $\frac{\partial{L}}{\partial{b}}=\frac{1}{m}(A-y)$ |
 
-
-#### z function
-We can also vectorize the $z$ function. If we decompose we have 2 others matrix:  
-$W=\begin{bmatrix} w_1 \\ \vdots \\ w_n\end{bmatrix}$ and $b=\begin{bmatrix} b \\ \vdots \\ b\end{bmatrix}$ 
-
-Then, $Z=X*W+b$
-
-#### a function
-For this one this is simple: $a=\frac{1}{1+e^{-Z}}$, we just reuse of $Z$ matrix and applying to it the sigmoide function.
-
-#### LogLoss function
-It is also simple for this one, we just need to reuse our vectors: $L=-\frac{1} {m}\sum_{i=1}^m Y\log(A)+(1-Y)\log(1-A)$  
-
-#### gradients
-Since we have $X$ that contain every variable we can also put every weights inside a vector:  
-$W = W - \alpha\frac{\partial{L}}{\partial{W}}$  with $\frac{\partial{L}}{\partial{W}}=\frac{1}{m}X^T*(A-y)$  
-
-$b = b - \alpha\frac{\partial{L}}{\partial{b}}$  with $\frac{\partial{L}}{\partial{b}}=\frac{1}{m}(A-y)$
-
-> [!NOTE]  
-> You might wonder why do we use the transpose of the matrix? To have the explanation develop this expression $\frac{\partial{L}}{\partial{W}}=\begin{bmatrix} \frac{\partial{L}}{\partial{w_1}} \\ \vdots \\ \frac{\partial{L}}{\partial{w_n}}\end{bmatrix}$
+> [!IMPORTANT]  
+> You might wonder why do we use the transpose of the matrix? Have a look at this expression:  
+>   
+> $`\frac{\partial{L}}{\partial{W}}=\begin{bmatrix} \frac{\partial{L}}{\partial{w_1}} \\ \vdots \\ \frac{\partial{L}}{\partial{w_n}}\end{bmatrix}`$
