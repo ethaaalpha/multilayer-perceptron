@@ -53,9 +53,9 @@ This involves to calculate the derivative of Log Loss.
 
 #### calculations
 As the **chain rule** we can express:  
-- $\frac{\partial{L}}{\partial{w_1}}=\frac{\partial{L}}{\partial{a}}*\frac{\partial{a}}{\partial{z}}*\frac{\partial{z}}{\partial{w_1}}$  
-- $\frac{\partial{L}}{\partial{w_2}}=\frac{\partial{L}}{\partial{a}}*\frac{\partial{a}}{\partial{z}}*\frac{\partial{z}}{\partial{w_2}}$  
-- $\frac{\partial{L}}{\partial{b}}=\frac{\partial{L}}{\partial{a}}*\frac{\partial{a}}{\partial{z}}*\frac{\partial{z}}{\partial{b}}$  
+- $ \frac{\partial{L}}{\partial{w_1}}=\frac{\partial{L}}{\partial{a}}*\frac{\partial{a}}{\partial{z}}*\frac{\partial{z}}{\partial{w_1} }$  
+- $ \frac{\partial{L}}{\partial{w_2}}=\frac{\partial{L}}{\partial{a}}*\frac{\partial{a}}{\partial{z}}*\frac{\partial{z}}{\partial{w_2}} $  
+- $ \frac{\partial{L}}{\partial{b}}=\frac{\partial{L}}{\partial{a}}*\frac{\partial{a}}{\partial{z}}*\frac{\partial{z}}{\partial{b}} $  
 
 As you see this is the last derivative that is changing depending on the variable.  
 We can calculate few derivatives:  
@@ -120,5 +120,4 @@ $W = W - \alpha\frac{\partial{L}}{\partial{W}}$  with $\frac{\partial{L}}{\parti
 $b = b - \alpha\frac{\partial{L}}{\partial{b}}$  with $\frac{\partial{L}}{\partial{b}}=\frac{1}{m}(A-y)$
 
 > [!NOTE]  
-> You might wonder why do we use the transpose of the matrix? To have the explanation develop this expression  
-$\frac{\partial{L}}{\partial{W}}=\begin{bmatrix} \frac{\partial{L}}{\partial{w_1}} \\ \vdots \\ \frac{\partial{L}}{\partial{w_n}}\end{bmatrix}$
+> You might wonder why do we use the transpose of the matrix? To have the explanation develop this expression $\frac{\partial{L}}{\partial{W}}=\begin{bmatrix} \frac{\partial{L}}{\partial{w_1}} \\ \vdots \\ \frac{\partial{L}}{\partial{w_n}}\end{bmatrix}$
