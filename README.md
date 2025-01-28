@@ -117,8 +117,8 @@ It is also simple for this one, we just need to reuse our vectors: $L=-\frac{1} 
 Since we have $X$ that contain every variable we can also put every weights inside a vector:  
 $W = W - \alpha\frac{\partial{L}}{\partial{W}}$  with $\frac{\partial{L}}{\partial{W}}=\frac{1}{m}X^T*(A-y)$  
 
-- $b = b - \alpha\frac{\partial{L}}{\partial{b}}$  with $\frac{\partial{L}}{\partial{b}}=\frac{1}{m}(A-y)$
+$b = b - \alpha\frac{\partial{L}}{\partial{b}}$  with $\frac{\partial{L}}{\partial{b}}=\frac{1}{m}(A-y)$
 
 > [!NOTE]  
-> You might wonder why do we use the transpose of the matrix? To have the explanation develop this expression
+> You might wonder why do we use the transpose of the matrix? To have the explanation develop this expression  
 $\frac{\partial{L}}{\partial{W}}=\begin{bmatrix} \frac{\partial{L}}{\partial{w_1}} \\ \vdots \\ \frac{\partial{L}}{\partial{w_n}}\end{bmatrix}$
