@@ -1,12 +1,12 @@
-# multilayer-perceptron
+# Multilayer-perceptron
 http://dossierslmm.chez-alice.fr/fiche/tableaux_derivees.pdf
 
 
-## perceptron (simple neuron)
+## Perceptron (simple neuron)
 
-### functions
+### Functions
 
-#### linear model function
+#### Linear model function
 $z(x_1, x_2)=x_1*w_1 + x_2*w_2 + b$  
 Where :
 - $x_1$ and $x_2$ are data passed to the fonction (from the data).  
@@ -18,7 +18,7 @@ If it is positive we are on the right side of the fonction, if it is negative on
 
 FAIRE UN DESSIN ICI AVEC DROITE QUI SEPARE DES POINTS
 
-#### activation function
+#### Activation function
 The activation function is used to convert the result of $z$ to a probability.  
 There are multiple activations functions but in this case we use the [**sigmoide**](https://en.wikipedia.org/wiki/Sigmoid_function).  
 
@@ -26,7 +26,7 @@ $a(z)=\frac{1}{1+e^-z}$
 
 FAIRE UN DESSIN AVEC LA FONCTION SIGMOIDE
 
-#### log loss function
+#### Log Loss function
 The function to calculate likelihood of our model is represented by $L=\prod_{i=1}^m a_{i}^{a_y}*(1-a_i)^{1-y_i}$, it is the sum of your probabilities.  
 The issue is that the number will tend towards 0 due to the multiplication of a number between [0, 1].  
 To avoid this problem, we will use the $\log$ and use [logarithms](https://en.wikipedia.org/wiki/Logarithm) attributes.  
@@ -49,9 +49,9 @@ This involves to calculate the derivative of Log Loss.
 > [!TIP]
 > You should do a linear regression before starting this project
 
-### derivated functions
+### Derivated functions
 
-#### calculations
+#### Calculations
 As the **chain rule** we can express:  
 - $\frac{\partial{L}}{\partial{w_1}} = \frac{\partial{L}}{\partial{a}} * \frac{\partial{a}}{\partial{z}} * \frac{\partial{z}}{\partial{w_1}}$  
 - $\frac{\partial{L}}{\partial{w_2}} = \frac{\partial{L}}{\partial{a}} * \frac{\partial{a}}{\partial{z}} * \frac{\partial{z}}{\partial{w_2}}$  
@@ -71,7 +71,7 @@ If we combine everything together we obtain:
 - $\frac{\partial{L}}{\partial{b}}=\frac{1}{m}\sum_{i=1}^m(a_i-y_i)$  
 Where $a_i$ is the value predicted for $i$, and $y_i$ the real one.  
 
-#### gradient
+#### Gradient
 If we apply the gradient descent formula, then we have:  
 - $w_1 = w_1 - \alpha\frac{\partial{L}}{\partial{w_1}}$  
 - $w_2 = w_2 - \alpha\frac{\partial{L}}{\partial{w_2}}$  
@@ -82,7 +82,7 @@ If we apply the gradient descent formula, then we have:
 - [Derivative](https://en.wikipedia.org/wiki/Derivative)
 - [List usuals derivatives](http://dossierslmm.chez-alice.fr/fiche/tableaux_derivees.pdf)]
 
-### vectorisations
+### Vectorisations
 Once we calculated every function that we need for our perceptron we might think of how vectorize it.  
 *Why you could tell me ?* Because it will simplificate our calculations.  
 For the moment we need to treat every data in a "for loop" and iterate over each index. But it is long and it cost us a lot of computation.  
@@ -99,7 +99,7 @@ To avoid this problem can vectorize our functions and data to treat them at the 
 | - | - | - |
 | dataset | $` X=\begin{bmatrix} x_1^{(1)} & \cdots & x_n^{(1)} \\ \vdots & \ddots & \vdots \\ x_1^{(m)} & \cdots & x_n^{(m)} \end{bmatrix} `$ <br><br>$`Y=\begin{bmatrix} y_1^{(1)} \\ \vdots \\ y_n^{(m)}\end{bmatrix}`$ | $X$ the dataset, $Y$ the expected output corresponding (used for validation). $m$ is the number of data **(entries)** and $n$ the number of variables **(features)**. |
 | $z(x_1, x_2)$ | $`W=\begin{bmatrix} w_1 \\ \vdots \\ w_n\end{bmatrix}$ and $b=\begin{bmatrix} b \\ \vdots \\ b\end{bmatrix}`$ <br> <br> $Z=X*W+b$ | $W$ the vector of each weights, $b$ for each *bias*. |
-| $a(z)$ | $a=\frac{1}{1+e^{-Z}}$ | We just reuse of $Z$ matrix and applying to it the sigmoide function. |
+| $a(z)$ | $A=\frac{1}{1+e^{-Z}}$ | We just reuse of $Z$ matrix and applying to it the sigmoide function. |
 | $LogLoss$ | $L=-\frac{1} {m}\sum_{i=1}^m Y\log(A)+(1-Y)\log(1-A)$ | Reuse of the previous matrixes. |
 | gradients | $W = W - \alpha\frac{\partial{L}}{\partial{W}}$ <br><br> $b = b - \alpha\frac{\partial{L}}{\partial{b}}$ | with $\frac{\partial{L}}{\partial{W}}=\frac{1}{m}X^T*(A-y)$ <br> <br> with $\frac{\partial{L}}{\partial{b}}=\frac{1}{m}(A-y)$ |
 
