@@ -1,6 +1,4 @@
 # Multilayer-perceptron
-http://dossierslmm.chez-alice.fr/fiche/tableaux_derivees.pdf
-
 
 ## Perceptron (simple neuron)
 
@@ -98,7 +96,7 @@ To avoid this problem can vectorize our functions and data to treat them at the 
 | Name | Vector(s) | Informations |
 | - | - | - |
 | dataset | $` X=\begin{bmatrix} x_1^{(1)} & \cdots & x_n^{(1)} \\ \vdots & \ddots & \vdots \\ x_1^{(m)} & \cdots & x_n^{(m)} \end{bmatrix} `$ <br><br>$`Y=\begin{bmatrix} y_1^{(1)} \\ \vdots \\ y_n^{(m)}\end{bmatrix}`$ | $X$ the dataset, $Y$ the expected output corresponding (used for validation). $m$ is the number of data **(entries)** and $n$ the number of variables **(features)**. |
-| $z(x_1, x_2)$ | $`W=\begin{bmatrix} w_1 \\ \vdots \\ w_n\end{bmatrix}$ and $b=\begin{bmatrix} b \\ \vdots \\ b\end{bmatrix}`$ <br> <br> $Z=XW+b$ | $W$ the vector of each weights, $b$ for each *bias*. |
+| $z(x_1, x_2)$ | $`W=\begin{bmatrix} w_1 \\ \vdots \\ w_n\end{bmatrix}`$ and $`b=\begin{bmatrix} b \\ \vdots \\ b\end{bmatrix}`$ <br> <br> $Z=XW+b$ | $W$ the vector of each weights, $b$ for each *bias*. |
 | $a(z)$ | $A=\frac{1}{1+e^{-Z}}$ | We just reuse of $Z$ matrix and applying to it the sigmoide function. |
 | $LogLoss$ | $L=-\frac{1} {m}\sum_{i=1}^m Y\log(A)+(1-Y)\log(1-A)$ | Reuse of the previous matrixes. |
 | gradients | $W = W - \alpha\frac{\partial{L}}{\partial{W}}$ <br><br> $b = b - \alpha\frac{\partial{L}}{\partial{b}}$ | with $\frac{\partial{L}}{\partial{W}}=\frac{1}{m}X^T*(A-y)$ <br> <br> with $\frac{\partial{L}}{\partial{b}}=\frac{1}{m}(A-y)$ |
@@ -112,7 +110,7 @@ To avoid this problem can vectorize our functions and data to treat them at the 
 > $A \odot B$ mean product term to term [ ](https://en.wikipedia.org/wiki/Hadamard_product_(matrices)) and $A \cdot B$ or $AB$ mean matrix product
 
 ## Multilayer perceptron
-Once you conceptualize your single perceptron (neuron), you have multiples of them. Indeed having multiples neurons can be helpful to solve non-linear problems.  
+Once you conceptualize your single perceptron (neuron), you can have multiple of them. Indeed having multiples neurons can be helpful to solve non-linear problems.  
 Our objective will be to construct layers of neurons that will pass informations to the next layer until they reach the last layer and have the output.  
 This phase will be defined by the **forward progagation**, representing data going from left to right.  
 Then we will need our model to learn, so depending on the output of our last layer. We will adapt each layer of our model to make it better.  
@@ -120,14 +118,53 @@ Well, the data will now pass from the right to left.
 This is called the **backward propagation**.  
 We already have computed the **learning process** of a neuron using the *gradient descent* is this [project](#log-loss-function).
 
+> [!NOTE]
+> We can remember the **backward propagation** is just applying LogLoss(aka cross-entropy function) to each neurons of a layer starting from the last layer to the first one.  
 
 ### Concept
 Instead of treating each neuron calculation independently we can as we made before vectorize them.  
 It will give us vectors of layers that will perfom all the calculation for a layer.
-Layer 0 and Layer n will be a little bit different since they are the extremis of our model. But for the layers between them we have the same logical.  
+Let's try to generalize our formulas to C layers, then will be able to have custom models.  
+
+*definitions:*  
+- $n$ the number of neuron in a layer and for the first layer the number of features * 
+- $m$ the number of entries in our dataset
+- $c$ the number of layers in our dataset, we will also use it as an index to move between layer
+
+> [!NOTE]
+> Input layer is just a placeholder without "neurons".  
+> So we do not include the input layer in the count of layers, it's implicit. 
+
+#### A layer
+To create a layer we will expand our existing vectors to have multiples neurons inside of them.  
+| $1$ neuron | $x$ neurons |
+|-|-|
+| $`W=\begin{bmatrix} w_{1} \\ \vdots \\ w_n\end{bmatrix} `$ | $`W=\begin{bmatrix} w_{11} & \cdots & w_{x1} \\ \vdots & \ddots & \vdots \\ w_{1n} & \cdots & w_{xm} \end{bmatrix} `$ |
+| $`b=\begin{bmatrix} b \\ \vdots \\ b\end{bmatrix} `$ | $`b=\begin{bmatrix} b_{1} & \cdots & b_{x} \\ \vdots & \ddots & \vdots \\ b_{m} & \cdots & b_{xm}  \end{bmatrix} `$ |
+| $`Z=\begin{bmatrix} z_1 \\ \vdots \\ b_m \end{bmatrix} `$ | $`b=\begin{bmatrix} z_{1}^{1} & \cdots & z_{1}^{x} \\ \vdots & \ddots & \vdots \\ z_{m}^1 & \cdots & z_{m}^x  \end{bmatrix} `$ |
+
+
+#### Two Layers
+As I said before, when we talk about two layers we mean an input layer, 2 hidden layers and an output layer.  
+
+##### Forward propagation
+$Z^{[1]}=W^{[1]}\cdot X +b^{[1]}$  
+$A^{[1]}=\frac{1}{1+e^{-Z^{[1]}}}$  
+$Z^{[2]}=W^{[2]}\cdot A^{[1]} +b^{[2]}$  
+$A^{[2]}=\frac{1}{1+e^{-Z^{[2]}}}$  
+
+You feel that is this not well complicated you just pass data *to the right*.  
+
+##### Backward propagation
+XW+b
+
+#### Extension to $C$ layers
+
+// demontrer pour le nombre de features pour le nombre de neuron du premier dataset en affichant les matrices
 
 
 
+<!-- 
 This is a less trivial representation of the perceptron.
 $
 \begin{bmatrix} 
@@ -137,4 +174,4 @@ x_2 \leftarrow w_3 + b\\
 \end{bmatrix} \leftarrow \sum\rightarrow{A}
 $
 
-If you vectorize it then we have 
+If you vectorize it then we have  -->

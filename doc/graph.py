@@ -29,4 +29,3 @@ def linear_function():
     x_points = np.linspace(0, 15)
     pl.plot(x_points, x_points*1.5 - 3.5)
     pl.show()
-
