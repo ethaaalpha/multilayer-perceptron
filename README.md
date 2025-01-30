@@ -80,7 +80,7 @@ If we apply the gradient descent formula, then we have:
 <ins>Few links to understand some tips about derivative and maths :</ins>
 - [Chain Rule](https://en.wikipedia.org/wiki/Chain_rule)
 - [Derivative](https://en.wikipedia.org/wiki/Derivative)
-- [List usuals derivatives](http://dossierslmm.chez-alice.fr/fiche/tableaux_derivees.pdf)]
+- [List usuals derivatives](http://dossierslmm.chez-alice.fr/fiche/tableaux_derivees.pdf)
 
 ### Vectorisations
 Once we calculated every function that we need for our perceptron we might think of how vectorize it.  
@@ -98,7 +98,7 @@ To avoid this problem can vectorize our functions and data to treat them at the 
 | Name | Vector(s) | Informations |
 | - | - | - |
 | dataset | $` X=\begin{bmatrix} x_1^{(1)} & \cdots & x_n^{(1)} \\ \vdots & \ddots & \vdots \\ x_1^{(m)} & \cdots & x_n^{(m)} \end{bmatrix} `$ <br><br>$`Y=\begin{bmatrix} y_1^{(1)} \\ \vdots \\ y_n^{(m)}\end{bmatrix}`$ | $X$ the dataset, $Y$ the expected output corresponding (used for validation). $m$ is the number of data **(entries)** and $n$ the number of variables **(features)**. |
-| $z(x_1, x_2)$ | $`W=\begin{bmatrix} w_1 \\ \vdots \\ w_n\end{bmatrix}$ and $b=\begin{bmatrix} b \\ \vdots \\ b\end{bmatrix}`$ <br> <br> $Z=X*W+b$ | $W$ the vector of each weights, $b$ for each *bias*. |
+| $z(x_1, x_2)$ | $`W=\begin{bmatrix} w_1 \\ \vdots \\ w_n\end{bmatrix}$ and $b=\begin{bmatrix} b \\ \vdots \\ b\end{bmatrix}`$ <br> <br> $Z=XW+b$ | $W$ the vector of each weights, $b$ for each *bias*. |
 | $a(z)$ | $A=\frac{1}{1+e^{-Z}}$ | We just reuse of $Z$ matrix and applying to it the sigmoide function. |
 | $LogLoss$ | $L=-\frac{1} {m}\sum_{i=1}^m Y\log(A)+(1-Y)\log(1-A)$ | Reuse of the previous matrixes. |
 | gradients | $W = W - \alpha\frac{\partial{L}}{\partial{W}}$ <br><br> $b = b - \alpha\frac{\partial{L}}{\partial{b}}$ | with $\frac{\partial{L}}{\partial{W}}=\frac{1}{m}X^T*(A-y)$ <br> <br> with $\frac{\partial{L}}{\partial{b}}=\frac{1}{m}(A-y)$ |
@@ -107,3 +107,34 @@ To avoid this problem can vectorize our functions and data to treat them at the 
 > You might wonder why do we use the transpose of the matrix? Have a look at this expression:  
 >   
 > $`\frac{\partial{L}}{\partial{W}}=\begin{bmatrix} \frac{\partial{L}}{\partial{w_1}} \\ \vdots \\ \frac{\partial{L}}{\partial{w_n}}\end{bmatrix}`$
+
+> [!TIP]
+> $A \odot B$ mean product term to term [ ](https://en.wikipedia.org/wiki/Hadamard_product_(matrices)) and $A \cdot B$ or $AB$ mean matrix product
+
+## Multilayer perceptron
+Once you conceptualize your single perceptron (neuron), you have multiples of them. Indeed having multiples neurons can be helpful to solve non-linear problems.  
+Our objective will be to construct layers of neurons that will pass informations to the next layer until they reach the last layer and have the output.  
+This phase will be defined by the **forward progagation**, representing data going from left to right.  
+Then we will need our model to learn, so depending on the output of our last layer. We will adapt each layer of our model to make it better.  
+Well, the data will now pass from the right to left.
+This is called the **backward propagation**.  
+We already have computed the **learning process** of a neuron using the *gradient descent* is this [project](#log-loss-function).
+
+
+### Concept
+Instead of treating each neuron calculation independently we can as we made before vectorize them.  
+It will give us vectors of layers that will perfom all the calculation for a layer.
+Layer 0 and Layer n will be a little bit different since they are the extremis of our model. But for the layers between them we have the same logical.  
+
+
+
+This is a less trivial representation of the perceptron.
+$
+\begin{bmatrix} 
+x_0 \leftarrow w_0 + b\\ 
+x_1 \leftarrow w_2 + b\\
+x_2 \leftarrow w_3 + b\\
+\end{bmatrix} \leftarrow \sum\rightarrow{A}
+$
+
+If you vectorize it then we have 
