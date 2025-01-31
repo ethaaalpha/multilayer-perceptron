@@ -5,7 +5,7 @@
 ### Functions
 
 #### Linear model function
-$z(x_1, x_2)=x_1*w_1 + x_2*w_2 + b$  
+$` z(x_1, x_2)=x_1*w_1 + x_2*w_2 + b `$  
 Where :
 - $x_1$ and $x_2$ are data passed to the fonction (from the data).  
 - $w_1$ and $w_2$ are weights determined during the learning phase to make a parameter more important than an another
@@ -14,7 +14,7 @@ Where :
 The result of this function tell us on which side of the data we are (logistic regression).  
 If it is positive we are on the right side of the fonction, if it is negative on the left side.  
 
-FAIRE UN DESSIN ICI AVEC DROITE QUI SEPARE DES POINTS
+<img src="doc/img/linear_function.png" width=500>
 
 #### Activation function
 The activation function is used to convert the result of $z$ to a probability.  
@@ -22,7 +22,7 @@ There are multiple activations functions but in this case we use the [**sigmoide
 
 $a(z)=\frac{1}{1+e^-z}$  
 
-FAIRE UN DESSIN AVEC LA FONCTION SIGMOIDE
+<img src="doc/img/sigmoide.png" width=500>
 
 #### Log Loss function
 The function to calculate likelihood of our model is represented by $L=\prod_{i=1}^m a_{i}^{a_y}*(1-a_i)^{1-y_i}$, it is the sum of your probabilities.  
@@ -36,16 +36,16 @@ You might wonder what is the $-\frac{1}{m}$ it is because we can't maximise a fu
 The division by m is just there to do some normalization of our result.  
 
 > [!IMPORTANT]
-> This function $LL$ is called LogLoss
+> This function $LL$ is called LogLoss.
 
 > [!NOTE]
-> Bernoulli distribution
+> Bernoulli distribution.
 
 If we want to minimize our Log Loss function we can use the **gradient descent** algorithm.  
 This involves to calculate the derivative of Log Loss.
 
 > [!TIP]
-> You should do a linear regression before starting this project
+> You should do a linear regression before starting this project.
 
 ### Derivated functions
 
@@ -107,7 +107,7 @@ To avoid this problem can vectorize our functions and data to treat them at the 
 > $`\frac{\partial{L}}{\partial{W}}=\begin{bmatrix} \frac{\partial{L}}{\partial{w_1}} \\ \vdots \\ \frac{\partial{L}}{\partial{w_n}}\end{bmatrix}`$
 
 > [!TIP]
-> $A \odot B$ mean product term to term [ ](https://en.wikipedia.org/wiki/Hadamard_product_(matrices)) and $A \cdot B$ or $AB$ mean matrix product
+> $A \odot B$ mean product term to term [Hadamard](https://en.wikipedia.org/wiki/Hadamard_product_(matrices)) and $A \cdot B$ or $AB$ mean matrix product.
 
 ## Multilayer perceptron
 Once you conceptualize your single perceptron (neuron), you can have multiple of them. Indeed having multiples neurons can be helpful to solve non-linear problems.  
@@ -180,18 +180,7 @@ $A^{[c]}=\frac{1}{1+e^{-Z^{[c]}}}$
 ##### Backward propagation
 
 $dZ^{[Cf]}= A^{[Cf]} - y$  where $Cf$ is the last layer (output)  
-$dW^{[c]}= \frac{1}{m} \odot dZ^{[c]} \cdot A^{[c-1]^{T}}$  
+$dW^{[c]}= \frac{1}{m} dZ^{[c]} \cdot A^{[c-1]^{T}}$  
 $db^{[c]}=\frac{1}{m}\sum{dZ^{[c]}}$  
-$dZ^{[c-1]}=W^{[c]^{T}} \cdot dZ^{[c]} \odot A^{[c-1]}(1-a^{[c-1]})$
+$dZ^{[c-1]}=W^{[c]^{T}} \cdot dZ^{[c]} \odot A^{[c-1]}(1-A^{[c-1]})$
 
-<!-- 
-This is a less trivial representation of the perceptron.
-$
-\begin{bmatrix} 
-x_0 \leftarrow w_0 + b\\ 
-x_1 \leftarrow w_2 + b\\
-x_2 \leftarrow w_3 + b\\
-\end{bmatrix} \leftarrow \sum\rightarrow{A}
-$
-
-If you vectorize it then we have  -->
