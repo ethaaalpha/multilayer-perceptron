@@ -99,7 +99,7 @@ To avoid this problem can vectorize our functions and data to treat them at the 
 | $z(x_1, x_2)$ | $`W=\begin{bmatrix} w_1 \\ \vdots \\ w_n\end{bmatrix}`$ and $`b=\begin{bmatrix} b \\ \vdots \\ b\end{bmatrix}`$ <br> <br> $Z=XW+b$ | $W$ the vector of each weights, $b$ for each *bias*. |
 | $a(z)$ | $A=\frac{1}{1+e^{-Z}}$ | We just reuse of $Z$ matrix and applying to it the sigmoide function. |
 | $LogLoss$ | $L=-\frac{1} {m}\sum_{i=1}^m Y\log(A)+(1-Y)\log(1-A)$ | Reuse of the previous matrixes. |
-| gradients | $W = W - \alpha\frac{\partial{L}}{\partial{W}}$ <br><br> $b = b - \alpha\frac{\partial{L}}{\partial{b}}$ | with $\frac{\partial{L}}{\partial{W}}=\frac{1}{m}X^T*(A-y)$ <br> <br> with $\frac{\partial{L}}{\partial{b}}=\frac{1}{m}(A-y)$ |
+| gradients | $W = W - \alpha\frac{\partial{L}}{\partial{W}}$ <br><br> $b = b - \alpha\frac{\partial{L}}{\partial{b}}$ | with $\frac{\partial{L}}{\partial{W}}=\frac{1}{m}X^T \cdot (A-y)$ <br> <br> with $\frac{\partial{L}}{\partial{b}}=\frac{1}{m}(A-y)$ |
 
 > [!IMPORTANT]  
 > You might wonder why do we use the transpose of the matrix? Have a look at this expression:  
@@ -156,13 +156,33 @@ $A^{[2]}=\frac{1}{1+e^{-Z^{[2]}}}$
 You feel that is this not well complicated you just pass data *to the right*.  
 
 ##### Backward propagation
-XW+b
+For the backward propagation we just need to compute our derivative of the LogLoss.  
+
+- $dZ2 = (A^{[2]}-y)$
+- $\frac{\partial{L}}{\partial{W^{[2]}}}=\frac{1}{m}dZ2 \cdot A^{[1]^{T}}$
+- $\frac{\partial{L}}{\partial{b^{[2]}}}=\frac{1}{m}\sum{dZ2}$
+- $dZ1 = W^{[2]^{T}} \cdot dZ2 \odot A^{[1]}(1-A^{[1]})$
+- $\frac{\partial{L}}{\partial{W^{[1]}}}=\frac{1}{m}dZ1 \cdot X^{T}$
+- $\frac{\partial{L}}{\partial{b^{[1]}}}=\frac{1}{m}\sum{dZ1}$
+
+> [!NOTE]
+> Why do we declare $dZ2$? It's because if you expand the formula it's something in common between the differents derivatives.  
+> Also the final layer is a little bit different because it compare to the real expected output instead comparing to a layer output.  
+
 
 #### Extension to $C$ layers
 
-// demontrer pour le nombre de features pour le nombre de neuron du premier dataset en affichant les matrices
+##### Forward propagation
 
+$Z^{[c]}=W^{[c]}\cdot A^{[c-1]} +b^{[c]}$  with  $X=A^{[0]}$  
+$A^{[c]}=\frac{1}{1+e^{-Z^{[c]}}}$  
 
+##### Backward propagation
+
+$dZ^{[Cf]}= A^{[Cf]} - y$  where $Cf$ is the last layer (output)  
+$dW^{[c]}= \frac{1}{m} \odot dZ^{[c]} \cdot A^{[c-1]^{T}}$  
+$db^{[c]}=\frac{1}{m}\sum{dZ^{[c]}}$  
+$dZ^{[c-1]}=W^{[c]^{T}} \cdot dZ^{[c]} \odot A^{[c-1]}(1-a^{[c-1]})$
 
 <!-- 
 This is a less trivial representation of the perceptron.
