@@ -158,7 +158,7 @@ $A^{[2]}=\frac{1}{1+e^{-Z^{[2]}}}$
 You feel that is this not well complicated you just pass data *to the right*.  
 
 ##### Backward propagation
-For the backward propagation we just need to compute our derivative of the LogLoss.  
+For the backward propagation we just need to compute our differents gradient using the partials derivatives of the *LogLoss* function.  
 
 - $dZ2 = (A^{[2]}-y)$
 - $\frac{\partial{L}}{\partial{W^{[2]}}}=\frac{1}{m}dZ2 \cdot A^{[1]^{T}}$
