@@ -143,6 +143,8 @@ To create a layer we will expand our existing vectors to have multiples neurons 
 | $`b=\begin{bmatrix} b \\ \vdots \\ b\end{bmatrix} `$ | $`b=\begin{bmatrix} b_{1} & \cdots & b_{x} \\ \vdots & \ddots & \vdots \\ b_{m} & \cdots & b_{xm}  \end{bmatrix} `$ |
 | $`Z=\begin{bmatrix} z_1 \\ \vdots \\ b_m \end{bmatrix} `$ | $`b=\begin{bmatrix} z_{1}^{1} & \cdots & z_{1}^{x} \\ \vdots & \ddots & \vdots \\ z_{m}^1 & \cdots & z_{m}^x  \end{bmatrix} `$ |
 
+> [!IMPORTANT]
+> In the code W, b and Z will be transposed but it's the same thing.  
 
 #### Two Layers
 As I said before, when we talk about two layers we mean an input layer, 2 hidden layers and an output layer.  

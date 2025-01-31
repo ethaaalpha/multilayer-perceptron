@@ -1,14 +1,31 @@
 import csv
-from objects.dataset import DataSet
+from src.file.dataset import DataSet
 
 class CSVManager:
-    def load(self, filepath: str) -> DataSet:
-        """Load the CSV file"""
-        data = list()
+    def load(self, filepath: str, y_index: int, values_index: int) -> DataSet:
+        """Load the CSV file. You can put anything before y_index it won't be used !"""
+        result = list()
 
         with open(filepath, 'r') as file:
             data = list(csv.reader(file, delimiter=","))
-        return DataSet(data)
+
+            for row in data:
+                line = list()
+                for i in range(y_index, len(row)):
+                    if (i >= values_index):
+                        try:
+                            line.append(float(row[i]))
+                        except ValueError:
+                            print("Failed to convert value to float, appending 1 instead!")
+                            line.append(1)
+                    else:
+                        # transform M and B to 0 and 1 (y values)
+                        if (row[i] == 'M'):
+                            line.append(0)
+                        else:
+                            line.append(1)
+                result.append(line)
+        return DataSet(result)
 
     def export(self, filepath: str, *values: tuple[float, float]):
         """Export the values from the training into a specific file"""
