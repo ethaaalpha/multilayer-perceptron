@@ -95,8 +95,8 @@ To avoid this problem can vectorize our functions and data to treat them at the 
 
 | Name | Vector(s) | Informations |
 | - | - | - |
-| dataset | $` X=\begin{bmatrix} x_1^{(1)} & \cdots & x_n^{(1)} \\ \vdots & \ddots & \vdots \\ x_1^{(m)} & \cdots & x_n^{(m)} \end{bmatrix} `$ <br><br>$`Y=\begin{bmatrix} y_1^{(1)} \\ \vdots \\ y_n^{(m)}\end{bmatrix}`$ | $X$ the dataset, $Y$ the expected output corresponding (used for validation). $m$ is the number of data **(entries)** and $n$ the number of variables **(features)**. |
-| $z(x_1, x_2)$ | $`W=\begin{bmatrix} w_1 \\ \vdots \\ w_n\end{bmatrix}`$ and $`b=\begin{bmatrix} b \\ \vdots \\ b\end{bmatrix}`$ <br> <br> $Z=XW+b$ | $W$ the vector of each weights, $b$ for each *bias*. |
+| dataset | $` X=\begin{bmatrix} x_1^{(1)} & \cdots & x_1^{(m)} \\ \vdots & \ddots & \vdots \\ x_n^{(1)} & \cdots & x_n^{(m)} \end{bmatrix} `$ <br><br>$`Y=\begin{bmatrix} y_1 & \cdots & y_m\end{bmatrix}`$ | $X$ the dataset, $Y$ the expected output corresponding (used for validation). $m$ is the number of data **(entries)** and $n$ the number of variables **(features)**. |
+| $z(x_1, x_2)$ | $`W=\begin{bmatrix} w_1 & \cdots & w_n\end{bmatrix}`$ and $`b=\begin{bmatrix} b & \cdots & b\end{bmatrix}`$ <br> <br> $Z=XW+b$ | $W$ the vector of each weights, $b$ for each *bias*. |
 | $a(z)$ | $A=\frac{1}{1+e^{-Z}}$ | We just reuse of $Z$ matrix and applying to it the sigmoide function. |
 | $LogLoss$ | $L=-\frac{1} {m}\sum_{i=1}^m Y\log(A)+(1-Y)\log(1-A)$ | Reuse of the previous matrixes. |
 | gradients | $W = W - \alpha\frac{\partial{L}}{\partial{W}}$ <br><br> $b = b - \alpha\frac{\partial{L}}{\partial{b}}$ | with $\frac{\partial{L}}{\partial{W}}=\frac{1}{m}X^T \cdot (A-y)$ <br> <br> with $\frac{\partial{L}}{\partial{b}}=\frac{1}{m}(A-y)$ |
@@ -139,12 +139,10 @@ Let's try to generalize our formulas to C layers, then will be able to have cust
 To create a layer we will expand our existing vectors to have multiples neurons inside of them.  
 | $1$ neuron | $x$ neurons |
 |-|-|
-| $`W=\begin{bmatrix} w_{1} \\ \vdots \\ w_n\end{bmatrix} `$ | $`W=\begin{bmatrix} w_{11} & \cdots & w_{x1} \\ \vdots & \ddots & \vdots \\ w_{1n} & \cdots & w_{xm} \end{bmatrix} `$ |
-| $`b=\begin{bmatrix} b \\ \vdots \\ b\end{bmatrix} `$ | $`b=\begin{bmatrix} b_{1} & \cdots & b_{x} \\ \vdots & \ddots & \vdots \\ b_{m} & \cdots & b_{xm}  \end{bmatrix} `$ |
-| $`Z=\begin{bmatrix} z_1 \\ \vdots \\ b_m \end{bmatrix} `$ | $`b=\begin{bmatrix} z_{1}^{1} & \cdots & z_{1}^{x} \\ \vdots & \ddots & \vdots \\ z_{m}^1 & \cdots & z_{m}^x  \end{bmatrix} `$ |
-
-> [!IMPORTANT]
-> In the code W, b and Z will be transposed but it's the same thing.  
+| $`W=\begin{bmatrix} w_{1} & \cdots & w_n\end{bmatrix} `$ | $`W=\begin{bmatrix} w_{11} & \cdots & w_{1n} \\ \vdots & \ddots & \vdots \\ w_{x1} & \cdots & w_{xn} \end{bmatrix} `$ |
+| $`b=\begin{bmatrix} b & \cdots & b\end{bmatrix} `$ | $`b=\begin{bmatrix} b_{1} & \cdots & b_{1n} \\ \vdots & \ddots & \vdots \\ b_{x} & \cdots & b_{xn}  \end{bmatrix} `$ |
+| $`Z=\begin{bmatrix} z_1 \\ \vdots \\ z_m \end{bmatrix} `$ | $`Z=\begin{bmatrix} z_{1}^{1} & \cdots & z_{1}^{x} \\ \vdots & \ddots & \vdots \\ z_{n}^1 & \cdots & z_{n}^x  \end{bmatrix} `$ |
+  
 
 #### Two Layers
 As I said before, when we talk about two layers we mean an input layer, 2 hidden layers and an output layer.  
@@ -171,7 +169,6 @@ For the backward propagation we just need to compute our differents gradient usi
 > Why do we declare $dZ2$? It's because if you expand the formula it's something in common between the differents derivatives.  
 > Also the final layer is a little bit different because it compare to the real expected output instead comparing to a layer output.  
 
-
 #### Extension to $C$ layers
 
 ##### Forward propagation
@@ -182,7 +179,22 @@ $A^{[c]}=\frac{1}{1+e^{-Z^{[c]}}}$
 ##### Backward propagation
 
 $dZ^{[Cf]}= A^{[Cf]} - y$  where $Cf$ is the last layer (output)  
-$dW^{[c]}= \frac{1}{m} dZ^{[c]} \cdot A^{[c-1]^{T}}$  
-$db^{[c]}=\frac{1}{m}\sum{dZ^{[c]}}$  
 $dZ^{[c-1]}=W^{[c]^{T}} \cdot dZ^{[c]} \odot A^{[c-1]}(1-A^{[c-1]})$
 
+  
+$dW^{[c]}= \frac{1}{m} dZ^{[c]} \cdot A^{[c-1]^{T}}$  
+$db^{[c]}=\frac{1}{m}\sum{dZ^{[c]}}$  
+
+PCA pour visualiser
+
+adam optimizer
+
+function coût
+
+principe d'un early stoping. 
+si loss n'évolue sur plusieurs epoch. 
+
+faire une boite a moustache
+
+
+batch descent gradient vs stochastict gradient descent
