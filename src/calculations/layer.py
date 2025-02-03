@@ -25,22 +25,26 @@ class Layer:
         A = A[c-1] with z = A[0]
         Return A[c]
         """
-        # print(np.shape(self.W))
-        # print(np.shape(A))
-        # print(np.shape(self.b))`
+        # print(f"A: {np.shape(A)}")
+        # print(f"W: {np.shape(self.W)}")
+        # print(f"b: {np.shape(self.b)}")
         self.Z = self.W @ A + self.b
         self.A = self.activator.apply(self.Z)
 
         return self.A
 
     def backward_last(self, Y: np.array):
+        print(f"Y: {np.shape(Y)}")
+        print(f"A: {np.shape(self.A)}")
+        print("la -- la")
         self.dZ = self.A - Y
         print(f"j'ai fini la backward pour {self.c}")
 
     def backward(self, A_before: np.array, dZ_before: np.array, W_before: np.array):
-        print(np.shape(A_before))
-        print(np.shape(dZ_before))
-        print(np.shape(W_before))
+        print(f"A: {np.shape(self.A)}")
+        print(f"A-1: {np.shape(A_before)}")
+        print(f"dZ-1: {np.shape(dZ_before)}")
+        print(f"W-1: {np.shape(W_before)}")
         self.dZ = np.transpose(W_before) @ dZ_before * self.A * (1 - self.A)
 
         self.dB = 1 / self.m * np.sum(self.dZ)

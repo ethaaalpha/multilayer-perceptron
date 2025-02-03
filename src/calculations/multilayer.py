@@ -10,14 +10,14 @@ class MultiLayer:
         self.Y = Y
         self.c = 0
 
-        print(np.shape(X))
-        print(np.shape(Y))
+        # print(np.shape(X))
+        # print(np.shape(Y))
 
     def add_layer(self, size, activator, init):
         # input layer is implicit
         n_before = self.layers[-1].n if self.c > 0 else len(self.X) # size feature or last layer neurons
 
-        layer = Layer(size, len(self.X), n_before, self.c, activator, init)
+        layer = Layer(size, len(self.X[0]), n_before, self.c, activator, init)
 
         self.layers.append(layer)
         self.c += 1
@@ -40,9 +40,9 @@ class MultiLayer:
         for layer in list(reversed(self.layers[:-1])): # omiting ouput layer
             layer.backward(layer_before.A, layer_before.dZ, layer_before.W)
 
-        # gradient update / gradient descent
-        for layer in list(self.layers[-1]):
-            layer.update_gradient()
+        # # gradient update / gradient descent
+        # for layer in list(self.layers[-1]):
+        #     layer.update_gradient()
 
     def use():
         return
