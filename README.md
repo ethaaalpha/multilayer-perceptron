@@ -185,6 +185,8 @@ $dZ^{[c-1]}=W^{[c]^{T}} \cdot dZ^{[c]} \odot A^{[c-1]}(1-A^{[c-1]})$
 $dW^{[c]}= \frac{1}{m} dZ^{[c]} \cdot A^{[c-1]^{T}}$  
 $db^{[c]}=\frac{1}{m}\sum{dZ^{[c]}}$  
 
+mettre les tailles des matrices (pour vérifier)
+
 PCA pour visualiser
 
 adam optimizer

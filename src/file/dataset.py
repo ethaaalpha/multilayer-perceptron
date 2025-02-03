@@ -11,7 +11,7 @@ class DataSet:
 
         raw_columns = [[row[i] for row in self._data] for i in range(len(self._data[0]))]
         normalized_columns = [tool.normalize_list(c) for c in raw_columns]
-        normalized_rows = [[c[i] for c in normalized_columns] for i in range(len(normalized_columns))]
+        normalized_rows = [[c[i] for c in normalized_columns] for i in range(len(normalized_columns[0]))]
 
         self._rows, self._columns = normalized_rows, normalized_columns
 
