@@ -27,11 +27,15 @@ class MultiLayer:
         print(f"il y a {len(self.layers)} layers")
         number_epoch = 100
 
+        ll_l = list()
+        i_l = list()
         for i in range(number_epoch):
             self.__epoch()
             output_layer = self.layers[-1]
             ll = - 1 / output_layer.m * np.sum(self.Y * np.log(output_layer.A) + (1 - self.Y) * np.log(1 - output_layer.A))
-            pp.plot(i, ll, 'o')
+            i_l.append(i)
+            ll_l.append(ll)
+        pp.plot(i_l, ll_l)
         pp.show()
             #ici afficher la function logloss
 
@@ -45,7 +49,7 @@ class MultiLayer:
         layer_plus: Layer = self.layers[-1]
         layer_minus: Layer = self.layers[-2]
         for i in range(len(self.layers) - 1, -1, -1): # omiting ouput layer
-            print(f"layer-1: {layer_minus.c} | layer: {self.layers[i].c} | | layer+1: {layer_plus.c}")
+            # print(f"layer-1: {layer_minus.c} | layer: {self.layers[i].c} | | layer+1: {layer_plus.c}")
             if i == len(self.layers) - 1:
                 self.layers[i].backward(layer_minus.A, None, None, Y=self.Y, cf=True)
             else:
@@ -57,7 +61,5 @@ class MultiLayer:
         for layer in self.layers:
             layer.update_gradient()
 
-    def use():
-        return
     def load():
         return

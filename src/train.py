@@ -16,10 +16,14 @@ def main():
     Y_list = data.column(0)
 
     mlp: MultiLayer = MultiLayer(np.array(X_list), np.array(Y_list))
-    mlp.add_layer(60, Activations.SIGMOIDE, Initializers.HE_INIT)
-    mlp.add_layer(20, Activations.SIGMOIDE, Initializers.HE_INIT)
+    mlp.add_layer(24, Activations.RELU, Initializers.HE_INIT)
+    mlp.add_layer(24, Activations.RELU, Initializers.HE_INIT)
+    mlp.add_layer(24, Activations.RELU, Initializers.HE_INIT)
     mlp.add_layer(1, Activations.SIGMOIDE, Initializers.HE_INIT)
     mlp.learn()
 
 if __name__ == "__main__":
     main()
+
+
+# https://github.com/Sleleu/multilayer-perceptron

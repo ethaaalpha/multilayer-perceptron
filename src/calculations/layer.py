@@ -3,7 +3,7 @@ from calculations.functions.initializers import Initializers
 import numpy as np
 
 class Layer:
-    learning_rate = 1
+    learning_rate = 0.05
 
     def __init__(self, n: int, m: int, n_before: int, c: int, activator: Activations, init: Initializers):
         """
@@ -28,12 +28,9 @@ class Layer:
         # print(f"A: {np.shape(A)}")
         # print(f"W: {np.shape(self.W)}")
         # print(f"b: {np.shape(self.b)}")
-        print(self.b)
-        print(self.W)
-        print(A_before)
         self.Z = self.W @ A_before + self.b
         self.A = self.activator.apply(self.Z)
-        print(f"c: {self.c} -> {self.A}")
+        # print(f"c: {self.c} -> {self.A}")
         return self.A
 
     def backward_last(self, Y: np.array):
