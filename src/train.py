@@ -16,9 +16,8 @@ def main():
     Y_list = data.column(0)
 
     mlp: MultiLayer = MultiLayer(np.array(X_list), np.array(Y_list))
-    mlp.add_layer(24, Activations.RELU, Initializers.HE_INIT)
-    mlp.add_layer(24, Activations.RELU, Initializers.HE_INIT)
-    mlp.add_layer(24, Activations.RELU, Initializers.HE_INIT)
+    mlp.add_layer(30, Activations.SIGMOIDE, Initializers.HE_INIT)
+    mlp.add_layer(24, Activations.SIGMOIDE, Initializers.HE_INIT)
     mlp.add_layer(1, Activations.SIGMOIDE, Initializers.HE_INIT)
     mlp.learn()
 

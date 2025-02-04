@@ -191,6 +191,12 @@ $Y\in\mathbb{R}^{1*m}$<br><br>
 $W^{[c]}\in\mathbb{R}^{n^{[c]}*n^{[c-1]}}$  
 $b^{[c]}\in\mathbb{R}^{n^{[c]}*1}$  
 $A^{[c]},Z^{[c]}\in\mathbb{R}^{n^{[c]}*m}$  
+
+
+ajouter dans le fichier actionvations -> derivative
+
+
+
 mettre les tailles des matrices (pour vérifier)
 
 PCA pour visualiser

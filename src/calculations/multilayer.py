@@ -9,19 +9,39 @@ class MultiLayer:
         self.layers: list[Layer] = list()
         self.X = X
         self.Y = Y.reshape(1, -1)
+        self.m = X.shape[1]
         self.c = 0
 
-        # print(np.shape(X))
-        # print(np.shape(Y))
+    def add_layer(self, size, activator=Activations.SIGMOIDE, init=Initializers.AUTO):
+        n_before = 1
 
-    def add_layer(self, size, activator, init):
-        # input layer is implicit
-        n_before = self.layers[-1].n if self.c > 0 else len(self.X) # size feature or last layer neurons
+        if (self.c > 0):
+            n_before = self.layers[-1].n
 
-        layer = Layer(size, len(self.X[0]), n_before, self.c, activator, init)
-
-        self.layers.append(layer)
+        self.layers.append(Layer(size, self.m, n_before, self.c, activator, init))
+        print(f"le layer {self.c} a été ajouté !")
         self.c += 1
+
+    def __epoch(self):
+        # forward propagation
+        for i in range(1, self.c):
+            A_before = self.X if i == 1 else self.layers[i - 1].A
+            self.layers[i].forward(A_before)
+
+        # backward propagation
+        for i in reversed(range(1, self.c)): # ommiting output layer
+            layer = self.layers[i]
+            A_before = self.X if i == 1 else self.layers[i - 1].A
+
+            if (i == self.c - 1): # mean we are at final layer
+                layer.backward_last(self.Y, A_before)
+            else:
+                layer_plus = self.layers[i + 1]
+                layer.backward(A_before, layer_plus.W, layer_plus.dZ)
+
+        # gradient update / gradient descent
+        for i in range(1, self.c):
+            self.layers[i].update_gradient()
 
     def learn(self):
         print(f"il y a {len(self.layers)} layers")
@@ -38,28 +58,6 @@ class MultiLayer:
         pp.plot(i_l, ll_l)
         pp.show()
             #ici afficher la function logloss
-
-    def __epoch(self):
-        # forward propagation
-        A_before = self.X
-        for layer in self.layers:
-            A_before = layer.forward(A_before)
-
-        # backward propagation
-        layer_plus: Layer = self.layers[-1]
-        layer_minus: Layer = self.layers[-2]
-        for i in range(len(self.layers) - 1, -1, -1): # omiting ouput layer
-            # print(f"layer-1: {layer_minus.c} | layer: {self.layers[i].c} | | layer+1: {layer_plus.c}")
-            if i == len(self.layers) - 1:
-                self.layers[i].backward(layer_minus.A, None, None, Y=self.Y, cf=True)
-            else:
-                self.layers[i].backward(layer_minus.A, layer_plus.W, layer_plus.dZ)
-            layer_plus = self.layers[i]
-            layer_minus = self.layers[i - 2]
-
-        # gradient update / gradient descent
-        for layer in self.layers:
-            layer.update_gradient()
 
     def load():
         return
