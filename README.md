@@ -212,3 +212,7 @@ faire une boite a moustache
 
 
 batch descent gradient vs stochastict gradient descent
+
+https://developers.google.com/machine-learning/crash-course?hl=fr
+
+refaire les explications pour la dérivée dZ qui vaut A - Y pour bce et cee

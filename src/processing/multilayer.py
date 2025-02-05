@@ -1,5 +1,5 @@
-import numpy as np
 from processing.layer import Layer, LayerData
+import numpy as np
 from matplotlib import pyplot as pp
 from dataclasses import dataclass
 
@@ -19,7 +19,11 @@ class MultiLayer:
 
     def add_layer(self, size, **kwargs):
         """
-        Optionnals: activator, initializer
+        Optionnals: 
+        - activator(AbstractActivator): function used to transform into a probability the neuron output
+        - initializer(AbstractInitializer): function used to initialize the weights
+        - optimizer(AbtractOptimizer): function used to achieve the update of the gradients
+        - loss(AbstractLoss): function used to determine the loss of the model
         """
         n_before = self.layers[-1].data.n if self.c > 0 else 1
         data = LayerData(size, n_before, self.m, self.c, **kwargs)
@@ -57,12 +61,13 @@ class MultiLayer:
                 layer_plus = self.layers[i + 1]
                 layer.backward(A_before, layer_plus.W, layer_plus.dZ)
 
-        # gradient update / gradient descent
+        # gradient update
         for i in range(1, self.c):
             self.layers[i].update_gradient()
 
-        local_log_loss = - np.sum(Y_batch * np.log(self.layers[-1].A) + (1 - Y_batch) * np.log(1 - self.layers[-1].A))
-        return local_log_loss
+        # local_log_loss = - np.sum(Y_batch * np.log(self.layers[-1].A) + (1 - Y_batch) * np.log(1 - self.layers[-1].A))
+        local_loss = self.layers[-1].data.loss.apply(self.layers[-1].A, Y_batch)
+        return local_loss
 
     def learn(self):
         print(f"il y a {len(self.layers)} layers")

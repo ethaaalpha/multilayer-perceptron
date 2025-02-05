@@ -3,9 +3,10 @@ from preprocessing.file.dataset import DataSet
 from preprocessing.scalers import *
 
 from processing.multilayer import MultiLayer, ModelConfiguration
-from processing.functions.activators import Sigmoide
+from processing.functions.activators import Sigmoide, SoftMax
 from processing.functions.optimizers import GradientDescent
-from processing.functions.initializers import HE_UNIFORM
+from processing.functions.initializers import He_Uniform
+from processing.functions.losses import *
 
 import numpy as np
 
@@ -22,9 +23,9 @@ def main():
 
     mlp: MultiLayer = MultiLayer(np.array(X_list), np.array(Y_list), config)
     mlp.add_layer(30)
-    mlp.add_layer(40, activator=Sigmoide(), initializer=HE_UNIFORM(), optimizer=GradientDescent(temp))
-    mlp.add_layer(20, activator=Sigmoide(), initializer=HE_UNIFORM(), optimizer=GradientDescent(temp))
-    mlp.add_layer(1, activator=Sigmoide(), initializer=HE_UNIFORM(), optimizer=GradientDescent(temp))
+    mlp.add_layer(80, activator=Sigmoide(), initializer=He_Uniform(), optimizer=GradientDescent(temp))
+    mlp.add_layer(20, activator=Sigmoide(), initializer=He_Uniform(), optimizer=GradientDescent(temp))
+    mlp.add_layer(1, activator=Sigmoide(), initializer=He_Uniform(), optimizer=GradientDescent(temp))
     mlp.learn()
 
 if __name__ == "__main__":

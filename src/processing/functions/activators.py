@@ -15,5 +15,13 @@ class Sigmoide(AbstractActivator):
         return 1 / (1 + np.exp(-x))
 
     def apply_derivative(self, x):
-        sigmoide = self.apply(x)
-        return sigmoide * (1 - sigmoide)
+        """x is the value computed by apply()"""
+        return x * (1 - x)
+
+class SoftMax(AbstractActivator):
+    def apply(self, x):
+        exp_x = np.exp(x - np.max(x, axis=-1, keepdims=True))
+        return exp_x / np.sum(exp_x, axis=-1, keepdims=True)
+
+    def apply_derivative(self, x):
+        return 1

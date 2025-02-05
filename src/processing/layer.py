@@ -1,6 +1,7 @@
 from processing.functions.activators import AbstractActivator, Sigmoide
-from processing.functions.initializers import AbstractInitializer, AUTO
+from processing.functions.initializers import AbstractInitializer, Auto
 from processing.functions.optimizers import AbtractOptimizer, GradientDescent
+from processing.functions.losses import AbstractLoss, BCE
 from dataclasses import dataclass
 import numpy as np
 
@@ -11,8 +12,9 @@ class LayerData:
     m: int
     c: int
     activator: AbstractActivator = Sigmoide()
-    initializer: AbstractInitializer = AUTO()
+    initializer: AbstractInitializer = Auto()
     optimizer: AbtractOptimizer = GradientDescent(0.01)
+    loss: AbstractLoss = BCE()
 
     def generate_weights(self) -> tuple[np.array, np.array]:
         W = self.initializer.generate((self.n, self.n_before), self.n)
@@ -30,11 +32,11 @@ class Layer:
         self.A = self.data.activator.apply(self.Z)
 
     def backward_last(self, Y, A_before):
-        self.dZ = self.A - Y
+        self.dZ = self.data.loss.apply_derivative(self.A, Y)
         self.__backward(A_before, self.data.m)
 
     def backward(self, A_before: np.array, W_after: np.array, dZ_after: np.array):
-        self.dZ = np.transpose(W_after) @ dZ_after * self.A * (1 - self.A)
+        self.dZ = np.transpose(W_after) @ dZ_after * self.data.activator.apply_derivative(self.A)
         self.__backward(A_before, self.data.m)
 
     def __backward(self, A_before, m):

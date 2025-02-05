@@ -6,18 +6,18 @@ class AbstractInitializer(ABC):
     def generate(self, shape, n):
         pass
 
-class AUTO(AbstractInitializer):
+class Auto(AbstractInitializer):
     def generate(self, shape, n):
         return np.random.rand(*shape)
 
-class HE_UNIFORM(AbstractInitializer):
+class He_Uniform(AbstractInitializer):
     def generate(self, shape, n):
         return np.random.uniform(-np.sqrt(6. / n), np.sqrt(6. / n), size=shape)
 
-class HE_INIT(AbstractInitializer):
+class He_Normal(AbstractInitializer):
     def generate(self, shape, n):
         return np.random.rand(*shape) * np.sqrt(2. / n)
 
-class XAVIER_NORMAL(AbstractInitializer):
+class Xavier_Normal(AbstractInitializer):
     def generate(self, shape, n):
         return np.random.rand(*shape) * np.sqrt(1. / n)
