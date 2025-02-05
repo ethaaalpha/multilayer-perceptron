@@ -1,6 +1,6 @@
-from calculations.functions.activators import AbstractActivator, Sigmoide
-from calculations.functions.initializers import AbstractInitializer, AUTO
-from calculations.functions.optimizers import AbtractOptimizer, GradientDescent
+from processing.functions.activators import AbstractActivator, Sigmoide
+from processing.functions.initializers import AbstractInitializer, AUTO
+from processing.functions.optimizers import AbtractOptimizer, GradientDescent
 from dataclasses import dataclass
 import numpy as np
 
