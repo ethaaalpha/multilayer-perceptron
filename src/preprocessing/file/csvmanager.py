@@ -1,5 +1,5 @@
 import csv
-from file.dataset import DataSet
+from preprocessing.file.dataset import DataSet
 
 class CSVManager:
     def load(self, filepath: str, y_index: int, values_index: int) -> DataSet:

@@ -179,7 +179,7 @@ $A^{[c]}=\frac{1}{1+e^{-Z^{[c]}}}$
 ##### Backward propagation
 
 $dZ^{[Cf]}= A^{[Cf]} - y$  where $Cf$ is the last layer (output)  
-$dZ^{[c-1]}=W^{[c]^{T}} \cdot dZ^{[c]} \odot A^{[c-1]}(1-A^{[c-1]})$
+$dZ^{[c-1]}=W^{[c]^{T}} \cdot dZ^{[c]} \odot A^{[c-1]}(1-A^{[c-1]})$ where the right part is the derivate of $A$, here the sigmoide function  
 
   
 $dW^{[c]}= \frac{1}{m} dZ^{[c]} \cdot A^{[c-1]^{T}}$  

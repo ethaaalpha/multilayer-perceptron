@@ -1,24 +1,27 @@
-from file.csvmanager import CSVManager
-from file.dataset import DataSet
+from preprocessing.file.csvmanager import CSVManager
+from preprocessing.file.dataset import DataSet
+from preprocessing.scalers import *
 
-from calculations.multilayer import MultiLayer
-from matplotlib import pyplot as pl
-
-from calculations.functions.activations import Activations
-from calculations.functions.initializers import Initializers
+from calculations.multilayer import MultiLayer, ModelConfiguration
+from calculations.functions.activators import Sigmoide
+from calculations.functions.initializers import HE_UNIFORM
 
 import numpy as np
 
 def main():
+    scaler = Z_score()
     data: DataSet = CSVManager().load("data.csv", 1, 2)
 
-    X_list = [col for col in data.columns()[1:]]
+    X_list_raw = [col for col in data.columns()[1:]]
+    X_list = [scaler.normalize_list(axis) for axis in X_list_raw]
     Y_list = data.column(0)
 
     mlp: MultiLayer = MultiLayer(np.array(X_list), np.array(Y_list))
-    mlp.add_layer(30, Activations.SIGMOIDE, Initializers.HE_INIT)
-    mlp.add_layer(24, Activations.SIGMOIDE, Initializers.HE_INIT)
-    mlp.add_layer(1, Activations.SIGMOIDE, Initializers.HE_INIT)
+    mlp.add_layer(30)
+    mlp.add_layer(24, activator=Sigmoide(), initializer=HE_UNIFORM())
+    mlp.add_layer(24, activator=Sigmoide(), initializer=HE_UNIFORM())
+    mlp.add_layer(24, activator=Sigmoide(), initializer=HE_UNIFORM())
+    mlp.add_layer(1, activator=Sigmoide(), initializer=HE_UNIFORM())
     mlp.learn()
 
 if __name__ == "__main__":

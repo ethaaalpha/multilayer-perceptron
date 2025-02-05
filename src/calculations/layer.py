@@ -1,45 +1,49 @@
-from calculations.functions.activations import Activations
-from calculations.functions.initializers import Initializers
+from calculations.functions.activators import AbstractActivator, Sigmoide
+from calculations.functions.initializers import AbstractInitializer, AUTO
+from dataclasses import dataclass
 import numpy as np
 
+@dataclass
+class LayerData:
+    n: int
+    n_before: int
+    m: int
+    c: int
+    activator: AbstractActivator = Sigmoide()
+    initializer: AbstractInitializer = AUTO()
+
+    def generate_weights(self) -> tuple[np.array, np.array]:
+        W = self.initializer.generate((self.n, self.n_before), self.n)
+        b = np.zeros((self.n, 1))
+        return (W, b)
+
 class Layer:
-    learning_rate = 0.01
-
-    def __init__(self, n: int, m: int, n_before: int, c: int, activator: Activations, init: Initializers):
-        self.W = init.apply((n, n_before), n_before)
-        self.b = np.zeros((n, 1))
-        self.m = m
-        self.n = n
-        self.c = c
-        self.activator = activator
-
-    def load(self, W: np.array, b: np.array):
-        self.W = W
-        self.b = b
+    def __init__(self, data: LayerData):
+        self.data = data
+        if (self.data.c > 0):
+            self.W, self.b = data.generate_weights()
 
     def forward(self, A_before: np.array):
         self.Z = self.W @ A_before + self.b
-        self.A = self.activator.apply(self.Z)
-        # print(f"forward propagation faite pour le layer {self.c}")
+        self.A = self.data.activator.apply(self.Z)
 
     def backward_last(self, Y, A_before):
         self.dZ = self.A - Y
-        self.__backward(A_before)
+        self.__backward(A_before, self.data.m)
 
     def backward(self, A_before: np.array, W_after: np.array, dZ_after: np.array):
         self.dZ = np.transpose(W_after) @ dZ_after * self.A * (1 - self.A)
-        self.__backward(A_before)
+        self.__backward(A_before, self.data.m)
 
-    def __backward(self, A_before):
-        self.dW = 1 / self.m * self.dZ @ np.transpose(A_before)
-        self.dB = 1 / self.m * np.sum(self.dZ, axis=1, keepdims=True)
-        # print(f"backward propagation faite pour le layer {self.c}")
+    def __backward(self, A_before, m):
+        self.dW = 1 / m * self.dZ @ np.transpose(A_before)
+        self.dB = 1 / m * np.sum(self.dZ, axis=1, keepdims=True)
 
-    def update_gradient(self):
+    def update_gradient(self, learning_rate):
         """
         We actually do batch descent gradient because we are training threw the entire dataset 
         at the same time (and the gradient are leveraged be divided by m)
         """
-        self.W = self.W - self.learning_rate * self.dW
-        self.b = self.b - self.learning_rate * self.dB
+        self.W = self.W - learning_rate * self.dW
+        self.b = self.b - learning_rate * self.dB
         return
