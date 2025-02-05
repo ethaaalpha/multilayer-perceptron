@@ -1,5 +1,5 @@
-from calculations.layer import Layer, LayerData
 import numpy as np
+from processing.layer import Layer, LayerData
 from matplotlib import pyplot as pp
 from dataclasses import dataclass
 

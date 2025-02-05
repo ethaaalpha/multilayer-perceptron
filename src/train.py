@@ -2,10 +2,10 @@ from preprocessing.file.csvmanager import CSVManager
 from preprocessing.file.dataset import DataSet
 from preprocessing.scalers import *
 
-from calculations.multilayer import MultiLayer, ModelConfiguration
-from calculations.functions.activators import Sigmoide
-from calculations.functions.optimizers import GradientDescent
-from calculations.functions.initializers import HE_UNIFORM
+from processing.multilayer import MultiLayer, ModelConfiguration
+from processing.functions.activators import Sigmoide
+from processing.functions.optimizers import GradientDescent
+from processing.functions.initializers import HE_UNIFORM
 
 import numpy as np
 
