@@ -1,5 +1,6 @@
 from calculations.functions.activators import AbstractActivator, Sigmoide
 from calculations.functions.initializers import AbstractInitializer, AUTO
+from calculations.functions.optimizers import AbtractOptimizer, GradientDescent
 from dataclasses import dataclass
 import numpy as np
 
@@ -11,6 +12,7 @@ class LayerData:
     c: int
     activator: AbstractActivator = Sigmoide()
     initializer: AbstractInitializer = AUTO()
+    optimizer: AbtractOptimizer = GradientDescent(0.01)
 
     def generate_weights(self) -> tuple[np.array, np.array]:
         W = self.initializer.generate((self.n, self.n_before), self.n)
@@ -39,11 +41,11 @@ class Layer:
         self.dW = 1 / m * self.dZ @ np.transpose(A_before)
         self.dB = 1 / m * np.sum(self.dZ, axis=1, keepdims=True)
 
-    def update_gradient(self, learning_rate):
+    def update_gradient(self):
         """
         We actually do batch descent gradient because we are training threw the entire dataset 
         at the same time (and the gradient are leveraged be divided by m)
         """
-        self.W = self.W - learning_rate * self.dW
-        self.b = self.b - learning_rate * self.dB
+        self.W = self.data.optimizer.getW(self.W, self.dW)
+        self.b = self.data.optimizer.getB(self.b, self.dB)
         return

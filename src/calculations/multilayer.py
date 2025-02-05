@@ -5,9 +5,8 @@ from dataclasses import dataclass
 
 @dataclass
 class ModelConfiguration:
-    batch_size: int = 64
-    number_epoch: int = 2000
-    learning_rate: float = 0.01
+    batch_size: int = 8
+    number_epoch: int = 84
 
 class MultiLayer:
     def __init__(self, X: np.array, Y: np.array, config: ModelConfiguration = ModelConfiguration()):
@@ -60,7 +59,7 @@ class MultiLayer:
 
         # gradient update / gradient descent
         for i in range(1, self.c):
-            self.layers[i].update_gradient(self.config.learning_rate)
+            self.layers[i].update_gradient()
 
         local_log_loss = - np.sum(Y_batch * np.log(self.layers[-1].A) + (1 - Y_batch) * np.log(1 - self.layers[-1].A))
         return local_log_loss

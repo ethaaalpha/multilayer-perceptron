@@ -4,6 +4,7 @@ from preprocessing.scalers import *
 
 from calculations.multilayer import MultiLayer, ModelConfiguration
 from calculations.functions.activators import Sigmoide
+from calculations.functions.optimizers import GradientDescent
 from calculations.functions.initializers import HE_UNIFORM
 
 import numpy as np
@@ -16,12 +17,14 @@ def main():
     X_list = [scaler.normalize_list(axis) for axis in X_list_raw]
     Y_list = data.column(0)
 
+    temp = 0.314
+
     mlp: MultiLayer = MultiLayer(np.array(X_list), np.array(Y_list))
     mlp.add_layer(30)
-    mlp.add_layer(24, activator=Sigmoide(), initializer=HE_UNIFORM())
-    mlp.add_layer(24, activator=Sigmoide(), initializer=HE_UNIFORM())
-    mlp.add_layer(24, activator=Sigmoide(), initializer=HE_UNIFORM())
-    mlp.add_layer(1, activator=Sigmoide(), initializer=HE_UNIFORM())
+    mlp.add_layer(24, activator=Sigmoide(), initializer=HE_UNIFORM(), optimizer=GradientDescent(temp))
+    mlp.add_layer(24, activator=Sigmoide(), initializer=HE_UNIFORM(), optimizer=GradientDescent(temp))
+    mlp.add_layer(24, activator=Sigmoide(), initializer=HE_UNIFORM(), optimizer=GradientDescent(temp))
+    mlp.add_layer(1, activator=Sigmoide(), initializer=HE_UNIFORM(), optimizer=GradientDescent(temp))
     mlp.learn()
 
 if __name__ == "__main__":
