@@ -3,16 +3,32 @@ import numpy as np
 from matplotlib import pyplot as pp
 from dataclasses import dataclass
 
+def hot_encode(Y):
+    """HotEncode Y to be usable with softmax"""
+    # https://fr.wikipedia.org/wiki/Encodage_one-hot
+    classes = np.unique(Y)
+    result = np.zeros(((len(Y), len(classes))))
+    for i, value in enumerate(Y):
+        result[i, np.where(classes == value)] = 1
+    return result
+
 @dataclass
 class ModelConfiguration:
     batch_size: int = 8
-    number_epoch: int = 84
+    number_epoch: int = 600
 
 class MultiLayer:
     def __init__(self, X: np.array, Y: np.array, config: ModelConfiguration = ModelConfiguration()):
         self.layers: list[Layer] = list()
         self.X = X
-        self.Y = Y.reshape(1, -1)
+        print(Y)
+        print(np.shape(Y))
+        Y = hot_encode(Y).T
+        print(Y)
+        print(np.shape(Y))
+        # print("apres")
+        # print(Y.reshape(1, -1))
+        self.Y = Y #.reshape(1, -1)
         self.m = X.shape[1]
         self.c = 0
         self.config = config
@@ -51,11 +67,13 @@ class MultiLayer:
             self.layers[i].forward(A_before)
 
         # backward propagation
-        for i in reversed(range(1, self.c)): # ommiting output layer
+        # ommiting output layer
+        for i in reversed(range(1, self.c)):
             layer = self.layers[i]
             A_before = X_batch if i == 1 else self.layers[i - 1].A
 
-            if (i == self.c - 1): # mean we are at final layer
+            # mean we are at final layer
+            if (i == self.c - 1):
                 layer.backward_last(Y_batch, A_before)
             else:
                 layer_plus = self.layers[i + 1]

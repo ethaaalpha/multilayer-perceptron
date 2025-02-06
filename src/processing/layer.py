@@ -13,7 +13,7 @@ class LayerData:
     c: int
     activator: AbstractActivator = Sigmoide()
     initializer: AbstractInitializer = Auto()
-    optimizer: AbtractOptimizer = GradientDescent(0.01)
+    optimizer: AbtractOptimizer = GradientDescent(0.03)
     loss: AbstractLoss = BCE()
 
     def generate_weights(self) -> tuple[np.array, np.array]:
