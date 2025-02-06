@@ -20,8 +20,8 @@ class Sigmoide(AbstractActivator):
 
 class SoftMax(AbstractActivator):
     def apply(self, x):
-        exp_x = np.exp(x - np.max(x, axis=-1, keepdims=True))
-        return exp_x / np.sum(exp_x, axis=-1, keepdims=True)
+        exp_x = np.exp(x - np.max(x, axis=0, keepdims=True))  # Prevent overflow
+        return exp_x / exp_x.sum(axis=0, keepdims=True)
 
     def apply_derivative(self, x):
-        return 1
+        return x * (1 - x)

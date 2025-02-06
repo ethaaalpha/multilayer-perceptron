@@ -2,6 +2,8 @@ from abc import ABC, abstractmethod
 import numpy as np
 
 class AbstractLoss(ABC):
+    """Representation of a loss function, the mean of the loss is calculated in multilayer"""
+
     @abstractmethod
     def apply(self, A, Y):
         pass
@@ -26,6 +28,7 @@ class CCE(AbstractLoss):
     You have to use softmax activation function for OUTPUT layer.
     """
     def apply(self, A, Y):
+        # implement hot-incode
         return -np.sum(Y * np.log(A))
         # return -1/A.shape[1] * np.sum(Y * np.log(A))
 
