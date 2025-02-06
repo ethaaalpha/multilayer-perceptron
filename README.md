@@ -192,10 +192,7 @@ $W^{[c]}\in\mathbb{R}^{n^{[c]}*n^{[c-1]}}$
 $b^{[c]}\in\mathbb{R}^{n^{[c]}*1}$  
 $A^{[c]},Z^{[c]}\in\mathbb{R}^{n^{[c]}*m}$  
 
-
 ajouter dans le fichier actionvations -> derivative
-
-
 
 mettre les tailles des matrices (pour vérifier)
 
@@ -205,11 +202,10 @@ adam optimizer
 
 function coût
 
-principe d'un early stoping. 
+principe d'un early stoping.   
 si loss n'évolue sur plusieurs epoch. 
 
 faire une boite a moustache
-
 
 batch descent gradient vs stochastict gradient descent
 

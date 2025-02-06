@@ -13,11 +13,3 @@ class Auto(AbstractInitializer):
 class He_Uniform(AbstractInitializer):
     def generate(self, shape, n):
         return np.random.uniform(-np.sqrt(6. / n), np.sqrt(6. / n), size=shape)
-
-class He_Normal(AbstractInitializer):
-    def generate(self, shape, n):
-        return np.random.rand(*shape) * np.sqrt(2. / n)
-
-class Xavier_Normal(AbstractInitializer):
-    def generate(self, shape, n):
-        return np.random.rand(*shape) * np.sqrt(1. / n)

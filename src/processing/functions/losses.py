@@ -11,6 +11,7 @@ class AbstractLoss(ABC):
     def apply_derivative(self, A, Y):
         pass
 
+
 class BCE(AbstractLoss):
     """Binary Cross Entropy"""
     def apply(self, A, Y):

@@ -20,6 +20,9 @@ class Sigmoide(AbstractActivator):
 
 class SoftMax(AbstractActivator):
     def apply(self, x):
+        # we substract np.max for numerical stability
+        # we use axis 0 because we want to perfom the calculation on the column (r, c)
+        # column are the result of Z and row the number of class
         exp_x = np.exp(x - np.max(x, axis=0, keepdims=True))
         return exp_x / np.sum(exp_x, axis=0, keepdims=True)
 

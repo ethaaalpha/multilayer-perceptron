@@ -3,6 +3,7 @@ from processing.functions.initializers import AbstractInitializer, Auto
 from processing.functions.optimizers import AbtractOptimizer, GradientDescent
 from processing.functions.losses import AbstractLoss, BCE
 from dataclasses import dataclass
+from abc import ABC, abstractmethod
 import numpy as np
 
 @dataclass
@@ -20,6 +21,13 @@ class LayerData:
         W = self.initializer.generate((self.n, self.n_before), self.n)
         b = np.zeros((self.n, 1))
         return (W, b)
+
+class AbstractLayer(ABC):
+    @abstractmethod
+    def forward(self, A_before):
+        pass
+    @abstractmethod
+    def 
 
 class Layer:
     def __init__(self, data: LayerData):
