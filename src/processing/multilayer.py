@@ -1,4 +1,4 @@
-from processing.layer import Layer, LayerData
+from processing.layer import *
 import numpy as np
 from matplotlib import pyplot as pp
 from dataclasses import dataclass
@@ -15,25 +15,30 @@ def hot_encode(Y):
 @dataclass
 class ModelConfiguration:
     batch_size: int = 8
-    number_epoch: int = 600
+    number_epoch: int = 100
 
 class MultiLayer:
     def __init__(self, X: np.array, Y: np.array, config: ModelConfiguration = ModelConfiguration()):
-        self.layers: list[Layer] = list()
+        self.layers: list[AbstractLayer] = list()
         self.X = X
         print(Y)
         print(np.shape(Y))
         Y = hot_encode(Y).T
         print(Y)
         print(np.shape(Y))
-        # print("apres")
-        # print(Y.reshape(1, -1))
-        self.Y = Y #.reshape(1, -1)
+        self.Y = Y
         self.m = X.shape[1]
         self.c = 0
         self.config = config
 
-    def add_layer(self, size, **kwargs):
+    def add_input_layer(self, size):
+        """This layer act as a placeholder"""
+        if (self.c != 0):
+            raise IndexError("You can't have multiples input layers!")
+        else:
+            self.__append_layer(InputLayer(size, 0))
+
+    def add_dense_layer(self, size, **kwargs):
         """
         Optionnals: 
         - activator(AbstractActivator): function used to transform into a probability the neuron output
@@ -41,10 +46,24 @@ class MultiLayer:
         - optimizer(AbtractOptimizer): function used to achieve the update of the gradients
         - loss(AbstractLoss): function used to determine the loss of the model
         """
-        n_before = self.layers[-1].data.n if self.c > 0 else 1
-        data = LayerData(size, n_before, self.m, self.c, **kwargs)
+        if (self.c == 0):
+            raise IndexError("You must add an input layer before!")
+        else:
+            n_before = self.layers[-1].data.n
+            self.__append_layer(HiddenLayer(size, self.c, n_before, self.m, **kwargs))
 
-        self.layers.append(Layer(data))
+    def add_output_layer(self, size, **kwargs):
+        """Same optionnals than add_dense_layer"""
+        if (self.c < 2):
+            raise IndexError("You must add an input layer and minimum a dense layer before!")
+        elif any(isinstance(layer, OutputLayer) for layer in self.layers):
+            raise TypeError("You can't have multiple output layers!")
+        else:
+            n_before = self.layers[-1].data.n
+            self.__append_layer(OutputLayer(size, self.c, n_before, self.m, **kwargs))
+
+    def __append_layer(self, layer):
+        self.layers.append(layer)
         self.c += 1
 
     def __epoch(self, batch_size) -> float:
@@ -74,14 +93,14 @@ class MultiLayer:
 
             # mean we are at final layer
             if (i == self.c - 1):
-                layer.backward_last(Y_batch, A_before)
+                layer.backward(Y_batch, A_before)
             else:
                 layer_plus = self.layers[i + 1]
                 layer.backward(A_before, layer_plus.W, layer_plus.dZ)
 
         # gradient update
         for i in range(1, self.c):
-            self.layers[i].update_gradient()
+            self.layers[i].update_gradients()
 
         # local_log_loss = - np.sum(Y_batch * np.log(self.layers[-1].A) + (1 - Y_batch) * np.log(1 - self.layers[-1].A))
         local_loss = self.layers[-1].data.loss.apply(self.layers[-1].A, Y_batch)
@@ -98,3 +117,17 @@ class MultiLayer:
 
         pp.plot(index_history, loss_history)
         pp.show()
+
+    # def add_layer(self, size, **kwargs):
+    #     """
+    #     Optionnals: 
+    #     - activator(AbstractActivator): function used to transform into a probability the neuron output
+    #     - initializer(AbstractInitializer): function used to initialize the weights
+    #     - optimizer(AbtractOptimizer): function used to achieve the update of the gradients
+    #     - loss(AbstractLoss): function used to determine the loss of the model
+    #     """
+    #     n_before = self.layers[-1].data.n if self.c > 0 else 1
+    #     data = LayerData(size, n_before, self.m, self.c, **kwargs)
+
+    #     self.layers.append(Layer(data))
+    #     self.c += 1

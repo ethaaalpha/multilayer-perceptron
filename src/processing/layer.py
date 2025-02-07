@@ -9,9 +9,9 @@ import numpy as np
 @dataclass
 class LayerData:
     n: int
-    n_before: int
-    m: int
     c: int
+    n_before: int = 1
+    m: int = 1
     activator: AbstractActivator = Sigmoide()
     initializer: AbstractInitializer = Auto()
     optimizer: AbtractOptimizer = GradientDescent(0.03)
@@ -23,35 +23,46 @@ class LayerData:
         return (W, b)
 
 class AbstractLayer(ABC):
-    @abstractmethod
-    def forward(self, A_before):
-        pass
-    @abstractmethod
-    def 
+    def __init__(self, layerdata: LayerData):
+        self.data: LayerData = layerdata
 
-class Layer:
-    def __init__(self, data: LayerData):
-        self.data = data
-        if (self.data.c > 0):
-            self.W, self.b = data.generate_weights()
+    @abstractmethod
+    def forward(self, *args):
+        pass
+
+    @abstractmethod
+    def backward(self, *args):
+        pass
+
+class InputLayer(AbstractLayer):
+    """InputLayer is just a 'placeholder'"""
+    def __init__(self, size, c):
+        super().__init__(LayerData(size, c))
+
+    def forward(self):
+        return
+
+    def backward(self):
+        return
+
+class HiddenLayer(AbstractLayer):
+    def __init__(self, size, c, n_before, m, **kwargs):
+        super().__init__(LayerData(size, c, n_before, m, **kwargs))
+        self.W, self.b = self.data.generate_weights()
 
     def forward(self, A_before: np.array):
         self.Z = self.W @ A_before + self.b
         self.A = self.data.activator.apply(self.Z)
 
-    def backward_last(self, Y, A_before):
-        self.dZ = self.data.loss.apply_derivative(self.A, Y)
-        self.__backward(A_before, self.data.m)
-
     def backward(self, A_before: np.array, W_after: np.array, dZ_after: np.array):
         self.dZ = np.transpose(W_after) @ dZ_after * self.data.activator.apply_derivative(self.A)
-        self.__backward(A_before, self.data.m)
+        self.compute_gradients(A_before, self.data.m)
 
-    def __backward(self, A_before, m):
+    def compute_gradients(self, A_before: np.array, m):
         self.dW = 1 / m * self.dZ @ np.transpose(A_before)
         self.dB = 1 / m * np.sum(self.dZ, axis=1, keepdims=True)
 
-    def update_gradient(self):
+    def update_gradients(self):
         """
         We actually do batch descent gradient because we are training threw the entire dataset 
         at the same time (and the gradient are leveraged be divided by m)
@@ -59,3 +70,8 @@ class Layer:
         self.W = self.data.optimizer.getW(self.W, self.dW)
         self.b = self.data.optimizer.getB(self.b, self.dB)
         return
+
+class OutputLayer(HiddenLayer):
+    def backward(self, Y: np.array, A_before: np.array):
+        self.dZ = self.data.loss.apply_derivative(self.A, Y)
+        self.compute_gradients(A_before, self.data.m)
