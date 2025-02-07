@@ -64,8 +64,8 @@ class HiddenLayer(AbstractLayer):
 
     def update_gradients(self):
         """
-        We actually do batch descent gradient because we are training threw the entire dataset 
-        at the same time (and the gradient are leveraged be divided by m)
+        We actually do mini_batch / batch descent gradient because we are training threw the x elements of the dataset 
+        at the same time (and the gradient are leveraged be divided by m at the end of the epoch)
         """
         self.W = self.data.optimizer.getW(self.W, self.dW)
         self.b = self.data.optimizer.getB(self.b, self.dB)
