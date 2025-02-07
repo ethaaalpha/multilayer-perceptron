@@ -25,11 +25,7 @@ def main():
     mlp.add_input_layer(30)
     mlp.add_dense_layer(70, activator=Sigmoide(), initializer=He_Uniform(), optimizer=GradientDescent(temp))
     mlp.add_dense_layer(20, activator=Sigmoide(), initializer=He_Uniform(), optimizer=GradientDescent(temp))
-    # mlp.add_output_layer(2, activator=SoftMax(), initializer=He_Uniform(), optimizer=GradientDescent(temp), loss=CCE())
-    # mlp.add_layer(30)
-    # mlp.add_layer(70, activator=Sigmoide(), initializer=He_Uniform(), optimizer=GradientDescent(temp))
-    # mlp.add_layer(20, activator=Sigmoide(), initializer=He_Uniform(), optimizer=GradientDescent(temp))
-    # mlp.add_layer(2, activator=SoftMax(), initializer=He_Uniform(), optimizer=GradientDescent(temp), loss=CCE())
+    mlp.add_output_layer(2, activator=SoftMax(), initializer=He_Uniform(), optimizer=GradientDescent(temp), loss=CCE())
     mlp.learn()
 
 if __name__ == "__main__":

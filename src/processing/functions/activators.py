@@ -2,6 +2,9 @@ from abc import ABC, abstractmethod
 import numpy as np
 
 class AbstractActivator(ABC):
+    def __init__(self, name):
+        self.name = name
+
     @abstractmethod
     def apply(self, x):
         pass
@@ -11,6 +14,9 @@ class AbstractActivator(ABC):
         pass
 
 class Sigmoide(AbstractActivator):
+    def __init__(self):
+        super().__init__("Sigmoide")
+
     def apply(self, x):
         return 1 / (1 + np.exp(-x))
 
@@ -19,6 +25,9 @@ class Sigmoide(AbstractActivator):
         return x * (1 - x)
 
 class SoftMax(AbstractActivator):
+    def __init__(self):
+        super().__init__("Softmax")
+
     def apply(self, x):
         # we substract np.max for numerical stability
         # we use axis 0 because we want to perfom the calculation on the column (r, c)

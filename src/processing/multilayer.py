@@ -107,7 +107,13 @@ class MultiLayer:
         return local_loss
 
     def learn(self):
-        print(f"il y a {len(self.layers)} layers")
+        if (self.c < 2 or not any(isinstance(layer, OutputLayer) for layer in self.layers)):
+            raise ValueError("You must have an input layer, hidden layer(s) and an output layer!")
+
+        print(f"You start a learning with {len(self.layers)} layers")
+        print(f"{str(self.config)}")
+        for layer in self.layers:
+            print(f"layer {layer.data.c}/{self.c} -> size:{layer.data.n}, activator={layer.data.activator.name}")
 
         loss_history, index_history = list(), list()
         for i in range(self.config.number_epoch):
@@ -117,17 +123,3 @@ class MultiLayer:
 
         pp.plot(index_history, loss_history)
         pp.show()
-
-    # def add_layer(self, size, **kwargs):
-    #     """
-    #     Optionnals: 
-    #     - activator(AbstractActivator): function used to transform into a probability the neuron output
-    #     - initializer(AbstractInitializer): function used to initialize the weights
-    #     - optimizer(AbtractOptimizer): function used to achieve the update of the gradients
-    #     - loss(AbstractLoss): function used to determine the loss of the model
-    #     """
-    #     n_before = self.layers[-1].data.n if self.c > 0 else 1
-    #     data = LayerData(size, n_before, self.m, self.c, **kwargs)
-
-    #     self.layers.append(Layer(data))
-    #     self.c += 1
