@@ -1,32 +1,20 @@
-from processing.layer import *
 import numpy as np
+from processing.layer import *
+from processing.functions.losses import *
 from matplotlib import pyplot as pp
 from dataclasses import dataclass
-
-def hot_encode(Y):
-    """HotEncode Y to be usable with softmax"""
-    # https://fr.wikipedia.org/wiki/Encodage_one-hot
-    classes = np.unique(Y)
-    result = np.zeros(((len(Y), len(classes))))
-    for i, value in enumerate(Y):
-        result[i, np.where(classes == value)] = 1
-    return result
 
 @dataclass
 class ModelConfiguration:
     batch_size: int = 8
     number_epoch: int = 100
+    loss: AbstractLoss = CCE()
 
 class MultiLayer:
     def __init__(self, X: np.array, Y: np.array, config: ModelConfiguration = ModelConfiguration()):
         self.layers: list[AbstractLayer] = list()
         self.X = X
-        print(Y)
-        print(np.shape(Y))
-        Y = hot_encode(Y).T
-        print(Y)
-        print(np.shape(Y))
-        self.Y = Y
+        self.Y = config.loss.preprocessing(Y)
         self.m = X.shape[1]
         self.c = 0
         self.config = config
@@ -66,6 +54,24 @@ class MultiLayer:
         self.layers.append(layer)
         self.c += 1
 
+    def learn(self):
+        if (self.c < 2 or not any(isinstance(layer, OutputLayer) for layer in self.layers)):
+            raise ValueError("You must have an input layer, hidden layer(s) and an output layer!")
+
+        print(f"You start a learning with {len(self.layers)} layers")
+        print(f"config -> batch_size: {self.config.batch_size}, epochs_max: {self.config.number_epoch}, loss: {self.config.loss.name}")
+        for layer in self.layers:
+            print(f"layer {layer.data.c}/{self.c} -> size:{layer.data.n}, activator={layer.data.activator.name}")
+
+        loss_history, index_history = list(), list()
+        for i in range(self.config.number_epoch):
+            loss = self.__epoch(self.config.batch_size)
+            index_history.append(i)
+            loss_history.append(loss)
+
+        pp.plot(index_history, loss_history)
+        pp.show()
+
     def __epoch(self, batch_size) -> float:
         indices = np.arange(self.m)
         total_loss = 0
@@ -93,7 +99,7 @@ class MultiLayer:
 
             # mean we are at final layer
             if (i == self.c - 1):
-                layer.backward(Y_batch, A_before)
+                layer.backward(Y_batch, A_before, self.config.loss)
             else:
                 layer_plus = self.layers[i + 1]
                 layer.backward(A_before, layer_plus.W, layer_plus.dZ)
@@ -102,24 +108,5 @@ class MultiLayer:
         for i in range(1, self.c):
             self.layers[i].update_gradients()
 
-        # local_log_loss = - np.sum(Y_batch * np.log(self.layers[-1].A) + (1 - Y_batch) * np.log(1 - self.layers[-1].A))
-        local_loss = self.layers[-1].data.loss.apply(self.layers[-1].A, Y_batch)
+        local_loss = self.config.loss.apply(self.layers[-1].A, Y_batch)
         return local_loss
-
-    def learn(self):
-        if (self.c < 2 or not any(isinstance(layer, OutputLayer) for layer in self.layers)):
-            raise ValueError("You must have an input layer, hidden layer(s) and an output layer!")
-
-        print(f"You start a learning with {len(self.layers)} layers")
-        print(f"{str(self.config)}")
-        for layer in self.layers:
-            print(f"layer {layer.data.c}/{self.c} -> size:{layer.data.n}, activator={layer.data.activator.name}")
-
-        loss_history, index_history = list(), list()
-        for i in range(self.config.number_epoch):
-            loss = self.__epoch(self.config.batch_size)
-            index_history.append(i)
-            loss_history.append(loss)
-
-        pp.plot(index_history, loss_history)
-        pp.show()

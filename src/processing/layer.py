@@ -15,7 +15,6 @@ class LayerData:
     activator: AbstractActivator = Sigmoide()
     initializer: AbstractInitializer = Auto()
     optimizer: AbtractOptimizer = GradientDescent(0.03)
-    loss: AbstractLoss = BCE()
 
     def generate_weights(self) -> tuple[np.array, np.array]:
         W = self.initializer.generate((self.n, self.n_before), self.n)
@@ -72,6 +71,6 @@ class HiddenLayer(AbstractLayer):
         return
 
 class OutputLayer(HiddenLayer):
-    def backward(self, Y: np.array, A_before: np.array):
-        self.dZ = self.data.loss.apply_derivative(self.A, Y)
+    def backward(self, Y: np.array, A_before: np.array, loss: AbstractLoss):
+        self.dZ = loss.apply_derivative(self.A, Y)
         self.compute_gradients(A_before, self.data.m)
