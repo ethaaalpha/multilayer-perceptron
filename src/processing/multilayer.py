@@ -71,7 +71,7 @@ class MultiLayer:
         for layer in self.layers:
             print(f"layer {layer.data.c}/{self.c} -> size:{layer.data.n}, activator={layer.data.activator.name}")
 
-    def __epoch(self, batch_size):
+    def __epoch(self, batch_size, validation_data=None):
         indices = np.arange(self.m)
         number_batch_per_epoch = 0
  
@@ -87,14 +87,20 @@ class MultiLayer:
 
         self.stats.save("training_loss", self.m)
         self.stats.save("training_accuracy", number_batch_per_epoch)
+        self.__validate(validation_data)
 
     def __mini_batch(self, X_batch, Y_batch) -> float:
-        # forward propagation
+        self.__forward(X_batch)
+        self.__backward(X_batch, Y_batch)
+
+        return self.config.loss.apply(self.layers[-1].A, Y_batch)
+
+    def __forward(self, X_batch):
         for i in range(1, self.c):
             A_before = X_batch if i == 1 else self.layers[i - 1].A
             self.layers[i].forward(A_before)
 
-        # backward propagation
+    def __backward(self, X_batch, Y_batch):
         # ommiting output layer
         for i in reversed(range(1, self.c)):
             layer = self.layers[i]
@@ -111,5 +117,9 @@ class MultiLayer:
         for i in range(1, self.c):
             self.layers[i].update_gradients()
 
-        local_loss = self.config.loss.apply(self.layers[-1].A, Y_batch)
-        return local_loss
+    def __validate(self, X_val, Y_val):
+        self.__forward(X_val)
+
+        A = self.layers[-1].A
+        loss = self.config.loss.apply(A, Y_val)
+        accuracy = self.config.loss.accuracy(A, Y_val)
