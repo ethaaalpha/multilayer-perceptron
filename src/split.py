@@ -15,7 +15,8 @@ def split_data(data_path: str, dist: float):
 
         export("training.csv", data[:index])
         export("validation.csv", data[index:])
-        print(f"{len(data[:index])} + {len(data[index:])} = {len(data)}")
+        print("data successfuly exported to training.csv and validation.csv")
+        print(f"training: {len(data[:index])}, validation: {len(data[index:])}, total: {len(data)}")
 
 def dist_parsing(value):
     float_v = float(value)

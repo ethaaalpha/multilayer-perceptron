@@ -61,7 +61,7 @@ class MultiLayer:
         self.__info()
 
         for _ in range(self.config.number_epoch):
-            self.__epoch(self.config.batch_size)
+            self.__epoch(self.config.batch_size, validation_data)
 
         self.stats.display()
 
@@ -85,9 +85,11 @@ class MultiLayer:
             self.stats.register("training_accuracy", self.config.loss.accuracy(self.layers[-1].A, Y_batch))
             number_batch_per_epoch += 1
 
+        self.__validate(validation_data[0], validation_data[1])
         self.stats.save("training_loss", self.m)
         self.stats.save("training_accuracy", number_batch_per_epoch)
-        self.__validate(validation_data)
+        self.stats.save("validation_loss", self.m)
+        self.stats.save("validation_accuracy", 1)
 
     def __mini_batch(self, X_batch, Y_batch) -> float:
         self.__forward(X_batch)
@@ -121,5 +123,6 @@ class MultiLayer:
         self.__forward(X_val)
 
         A = self.layers[-1].A
-        loss = self.config.loss.apply(A, Y_val)
-        accuracy = self.config.loss.accuracy(A, Y_val)
+        Y = self.config.loss.preprocessing(Y_val)
+        self.stats.register("validation_loss", self.config.loss.apply(A, Y))
+        self.stats.register("validation_accuracy", self.config.loss.accuracy(A, Y))

@@ -23,7 +23,7 @@ def main():
     mlp.add_dense_layer(80, activator=Sigmoide(), initializer=He_Uniform(), optimizer=GradientDescent(temp))
     mlp.add_dense_layer(24, activator=Sigmoide(), initializer=He_Uniform(), optimizer=GradientDescent(temp))
     mlp.add_output_layer(2, activator=SoftMax(), initializer=He_Uniform(), optimizer=GradientDescent(temp))
-    mlp.learn()
+    mlp.learn(validation_data)
 
 if __name__ == "__main__":
     main()

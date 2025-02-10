@@ -12,7 +12,7 @@ class Stats:
             self.temp[name] = 0
         self.temp[name] += value
 
-    def save(self, name, ratio):
+    def save(self, name, ratio=1):
         if self.data.get(name) == None:
             self.data[name] = list()
         self.data[name].append(self.temp[name] / ratio)

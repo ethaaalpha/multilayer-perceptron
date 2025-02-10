@@ -1,6 +1,5 @@
 class DataSet:
     def __init__(self, data: list[list]):
-        print(data)
         self._data = data
         self._columns = [[row[i] for row in self._data] for i in range(len(self._data[0]))]
         self._rows = [[c[i] for c in self._columns] for i in range(len(self._columns[0]))]
