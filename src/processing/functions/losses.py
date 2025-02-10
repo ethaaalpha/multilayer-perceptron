@@ -14,6 +14,10 @@ class AbstractLoss(ABC):
     def apply_derivative(self, A, Y):
         pass
 
+    @abstractmethod
+    def accuracy(self, A, Y):
+        pass
+
     def preprocessing(self, Y) -> np.array:
         return Y
 
@@ -27,6 +31,11 @@ class BCE(AbstractLoss):
 
     def apply_derivative(self, A, Y):
         return A - Y
+
+    def accuracy(self, A, Y):
+        y_pred = np.astype((A > 0.5), int)
+        y_true = np.astype(Y, int)
+        return np.mean(y_pred == y_true)
 
     def preprocessing(self, Y):
         return np.reshape(Y, 1, -1)
@@ -46,6 +55,11 @@ class CCE(AbstractLoss):
 
     def apply_derivative(self, A, Y):
         return A - Y
+
+    def accuracy(self, A, Y):
+        y_pred = np.argmax(A, axis=0)
+        y_true = np.argmax(Y, axis=0)
+        return np.mean(y_pred == y_true)
 
     def preprocessing(self, Y):
         return self.___hot_encode(Y)

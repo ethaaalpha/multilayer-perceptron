@@ -216,3 +216,5 @@ refaire les explications pour la dérivée dZ qui vaut A - Y pour bce et cee
 cross validation avec kfold
 
 voir pour faire une interface InterfaceLayer
+
+tester si le fichier est vide

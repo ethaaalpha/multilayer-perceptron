@@ -1,10 +1,19 @@
 from abc import ABC, abstractmethod
+from preprocessing.file.dataset import DataSet
 import numpy as np
 
 class AbstractScaler(ABC):
     @abstractmethod
     def normalize_list(self, data: list[float]) -> list[float]:
         pass
+
+    def scale_data(self, dataset: DataSet) -> tuple[np.array, np.array]:
+        """Return (X_list, Y_list)"""
+        X_raw = [col for col in dataset.columns()[1:]]
+        X_list = [self.normalize_list(axis) for axis in X_raw]
+        Y_list = dataset.column(0)
+
+        return (np.array(X_list), np.array(Y_list))
 
 class MinMax(AbstractScaler):
     """Normalization of the values between [0, 1]"""

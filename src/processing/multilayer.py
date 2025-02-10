@@ -7,7 +7,7 @@ from dataclasses import dataclass
 @dataclass
 class ModelConfiguration:
     batch_size: int = 8
-    number_epoch: int = 100
+    number_epoch: int = 84
     loss: AbstractLoss = CCE()
 
 class MultiLayer:
@@ -54,27 +54,33 @@ class MultiLayer:
         self.layers.append(layer)
         self.c += 1
 
-    def learn(self):
+    def learn(self, validation_data=None):
         if (self.c < 2 or not any(isinstance(layer, OutputLayer) for layer in self.layers)):
             raise ValueError("You must have an input layer, hidden layer(s) and an output layer!")
+        self.__info()
 
+        training_loss_history, training_accuracy_history, index_history = list(), list(), list()
+        for i in range(self.config.number_epoch):
+            epoch_data = self.__epoch(self.config.batch_size)
+            index_history.append(i)
+            training_loss_history.append(epoch_data[0])
+            training_accuracy_history.append(epoch_data[1])
+
+        pp.plot(index_history, training_loss_history)
+        pp.plot(index_history, training_accuracy_history)
+        pp.show()
+
+    def __info(self):
         print(f"You start a learning with {len(self.layers)} layers")
         print(f"config -> batch_size: {self.config.batch_size}, epochs_max: {self.config.number_epoch}, loss: {self.config.loss.name}")
         for layer in self.layers:
             print(f"layer {layer.data.c}/{self.c} -> size:{layer.data.n}, activator={layer.data.activator.name}")
 
-        loss_history, index_history = list(), list()
-        for i in range(self.config.number_epoch):
-            loss = self.__epoch(self.config.batch_size)
-            index_history.append(i)
-            loss_history.append(loss)
-
-        pp.plot(index_history, loss_history)
-        pp.show()
-
-    def __epoch(self, batch_size) -> float:
+    def __epoch(self, batch_size) -> tuple[float, float]:
         indices = np.arange(self.m)
         total_loss = 0
+        total_accuracy = 0
+        number_batch_per_epoch = 0
  
         for start in range(0, self.m, batch_size):
             end = min(start + batch_size, self.m)
@@ -83,7 +89,9 @@ class MultiLayer:
             Y_batch = self.Y[:, batch_indices]
 
             total_loss += self.__mini_batch(X_batch, Y_batch)
-        return total_loss / self.m
+            total_accuracy += self.config.loss.accuracy(self.layers[-1].A, Y_batch)
+            number_batch_per_epoch += 1
+        return (total_loss / self.m, total_accuracy / number_batch_per_epoch)
 
     def __mini_batch(self, X_batch, Y_batch) -> float:
         # forward propagation
