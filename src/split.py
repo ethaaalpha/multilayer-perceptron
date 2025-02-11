@@ -6,6 +6,7 @@ def export(filepath: str, content):
     with open(filepath, 'w+') as file:
         wr = csv.writer(file)
         wr.writerows(content)
+        print(f"successfully writen data into: {filepath}")
 
 def split_data(data_path: str, dist: float):
     with open(data_path, 'r') as file:
@@ -15,7 +16,6 @@ def split_data(data_path: str, dist: float):
 
         export("training.csv", data[:index])
         export("validation.csv", data[index:])
-        print("data successfuly exported to training.csv and validation.csv")
         print(f"training: {len(data[:index])}, validation: {len(data[index:])}, total: {len(data)}")
 
 def dist_parsing(value):

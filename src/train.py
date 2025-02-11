@@ -16,7 +16,7 @@ def main():
     validation_data = scaler.scale_data(validation_dataset)
 
     temp = 0.03
-    config = ModelConfiguration(number_epoch=120)
+    config = ModelConfiguration(number_epoch=84)
 
     mlp: MultiLayer = MultiLayer(training_data[0], training_data[1], config)
     mlp.add_input_layer(30)
