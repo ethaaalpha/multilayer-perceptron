@@ -16,13 +16,13 @@ def main():
     training_data = scaler.scale_data(training_dataset)
     validation_data = scaler.scale_data(validation_dataset)
 
-    temp = 0.03
-    config = ModelConfiguration(number_epoch=80)
+    temp = 0.05
+    config = ModelConfiguration(number_epoch=120)
 
     mlp: MultiLayer = MultiLayer(training_data[0], training_data[1], config)
     mlp.add_input_layer(30)
-    mlp.add_dense_layer(2, activator=Sigmoide(), initializer=He_Uniform(), optimizer=GradientDescent(temp))
-    mlp.add_dense_layer(2, activator=Sigmoide(), initializer=He_Uniform(), optimizer=GradientDescent(temp))
+    mlp.add_dense_layer(80, activator=Sigmoide(), initializer=He_Uniform(), optimizer=GradientDescent(temp))
+    mlp.add_dense_layer(20, activator=Sigmoide(), initializer=He_Uniform(), optimizer=GradientDescent(temp))
     mlp.add_output_layer(2, activator=SoftMax(), initializer=He_Uniform(), optimizer=GradientDescent(temp))
     mlp.learn(validation_data)
 

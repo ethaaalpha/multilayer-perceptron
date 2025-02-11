@@ -23,6 +23,6 @@ class Stats:
 
         for k, v in self.data.items():
             pp.plot(indices, v, label=k)
-        pp.ylim(0, 1.2) # it's better
+        pp.ylim(0, 1) # it's better
         pp.legend()
         pp.show()

@@ -14,10 +14,6 @@ class AbstractLoss(ABC):
     def apply_derivative(self, A, Y):
         pass
 
-    @abstractmethod
-    def accuracy(self, A, Y):
-        pass
-
     def preprocessing(self, Y) -> np.array:
         return Y
 
@@ -72,3 +68,10 @@ class CCE(AbstractLoss):
         for i, value in enumerate(Y):
             result[i, np.where(classes == value)] = 1
         return result.T
+    
+def from_str(name) -> AbstractLoss:
+    match (name):
+        case "Binary Cross Entropy":
+            return BCE()
+        case "Categorical Cross Entropy":
+            return CCE()

@@ -100,7 +100,7 @@ class MultiLayer(LogicNetwork):
         for _ in range(self.config.number_epoch):
             self.__epoch(self.config.batch_size, validation_data)
 
-        # self.stats.display()
+        self.stats.display()
 
     def __info(self):
         print(f"You start a learning with {len(self.layers)} layers")
