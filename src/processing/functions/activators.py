@@ -37,3 +37,10 @@ class SoftMax(AbstractActivator):
 
     def apply_derivative(self, x):
         return 1
+
+def from_str(name) -> AbstractActivator:
+    match (name):
+        case "Sigmoide":
+            return Sigmoide()
+        case "Softmax":
+            return SoftMax()
