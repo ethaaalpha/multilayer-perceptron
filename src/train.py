@@ -1,6 +1,7 @@
 from preprocessing.file.csvmanager import CSVManager
 from preprocessing.file.dataset import DataSet
 from preprocessing.scalers import *
+from preprocessing.encoders import HotEncoder
 from processing.multilayer import MultiLayer, ModelConfiguration
 from processing.tools.model_manager import ModelManager
 from processing.functions.activators import Sigmoide, SoftMax
@@ -13,16 +14,16 @@ def main():
     training_dataset: DataSet = CSVManager().load("training.csv", 1, 2)
     validation_dataset: DataSet = CSVManager().load("validation.csv", 1, 2)
 
-    training_data = scaler.scale_data(training_dataset)
-    validation_data = scaler.scale_data(validation_dataset)
+    training_data = scaler.scale_data(training_dataset, HotEncoder())
+    validation_data = scaler.scale_data(validation_dataset, HotEncoder())
 
-    temp = 0.05
-    config = ModelConfiguration(number_epoch=120)
+    temp = 0.06
+    config = ModelConfiguration(number_epoch=5000, loss=BCE())
 
     mlp: MultiLayer = MultiLayer(training_data[0], training_data[1], config)
     mlp.add_input_layer(30)
     mlp.add_dense_layer(80, activator=Sigmoide(), initializer=He_Uniform(), optimizer=GradientDescent(temp))
-    mlp.add_dense_layer(20, activator=Sigmoide(), initializer=He_Uniform(), optimizer=GradientDescent(temp))
+    mlp.add_dense_layer(40, activator=Sigmoide(), initializer=He_Uniform(), optimizer=GradientDescent(temp))
     mlp.add_output_layer(2, activator=SoftMax(), initializer=He_Uniform(), optimizer=GradientDescent(temp))
     mlp.learn(validation_data)
 

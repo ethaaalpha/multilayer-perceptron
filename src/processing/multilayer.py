@@ -57,7 +57,7 @@ class MultiLayer(LogicNetwork):
     def __init__(self, X: np.array, Y = np.array, config: ModelConfiguration = ModelConfiguration()):
         super().__init__(config)
         self.X = X
-        self.Y = config.loss.preprocessing(Y)
+        self.Y = Y
         self.m = X.shape[1]
         self.stats = Stats(config)
 
@@ -100,19 +100,21 @@ class MultiLayer(LogicNetwork):
         for _ in range(self.config.number_epoch):
             self.__epoch(self.config.batch_size, validation_data)
 
+        self.stats.fig("Loss Evolution", "loss", ["training_loss", "validation_loss"])
+        self.stats.fig("Accuracy Evolution", "accuracy %", ["training_accuracy", "validation_accuracy"])
+        
         self.stats.display()
 
     def __info(self):
-        print(f"You start a learning with {len(self.layers)} layers")
-        print(f"config -> batch_size: {self.config.batch_size}, epochs_max: {self.config.number_epoch}, loss: {self.config.loss.name}")
-        for layer in self.layers:
-            print(f"layer {layer.data.c}/{self.c} -> size:{layer.data.n}, activator={layer.data.activator.name}")
+        return
+        # print(f"config -> batch_size: {self.config.batch_size}, epochs_max: {self.config.number_epoch}, loss: {self.config.loss.name}")
+        # for layer in self.layers:
+            # print(f"layer {layer.data.c}/{self.c} -> size:{layer.data.n}, activator={layer.data.activator.name}")
 
     def __epoch(self, batch_size, validation_data=None):
         indices = np.arange(self.m)
         number_batch_per_epoch = 0
  
-        self.__validate(validation_data[0], validation_data[1])
         for start in range(0, self.m, batch_size):
             end = min(start + batch_size, self.m)
             batch_indices = indices[start:end]
@@ -123,16 +125,17 @@ class MultiLayer(LogicNetwork):
             self.stats.register("training_accuracy", self.config.loss.accuracy(self.layers[-1].A, Y_batch))
             number_batch_per_epoch += 1
 
+        self.validate(validation_data[0], validation_data[1])
         self.stats.save("training_loss", self.m)
-        # self.stats.save("training_accuracy", number_batch_per_epoch)
-        self.stats.save("validation_loss", self.m)
-        # self.stats.save("validation_accuracy", 1)
+        self.stats.save("training_accuracy", number_batch_per_epoch)
+        self.stats.epoch()
 
-    def __validate(self, X_val, Y_val):
+    def validate(self, X_val, Y_val):
         self._forward(X_val)
 
         A = self.layers[-1].A
-        Y = self.config.loss.preprocessing(Y_val)
-        self.stats.register("validation_loss", self.config.loss.apply(A, Y))
-        self.stats.register("validation_accuracy", self.config.loss.accuracy(A, Y))
+        self.stats.register("validation_loss", self.config.loss.apply(A, Y_val))
+        self.stats.register("validation_accuracy", self.config.loss.accuracy(A, Y_val))
+        self.stats.save("validation_loss", len(X_val[0]))
+        self.stats.save("validation_accuracy", 1)
 

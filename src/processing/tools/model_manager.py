@@ -1,5 +1,7 @@
 from processing.multilayer import MultiLayer
-from processing.functions.activators import from_str
+from processing.multilayer import ModelConfiguration
+import processing.functions.activators as activators
+import processing.functions.losses as losses
 import numpy as np
 import json
 
@@ -16,11 +18,12 @@ class ModelManager:
         data = import_from_file(file_path)
         layers: dict = data["dense"]
 
-        mlp = MultiLayer(np.random.random((1,1)), np.random.random((1, 1)))
+        config = ModelConfiguration(loss=losses.from_str(data["loss"]))
+        mlp = MultiLayer(np.random.random((1,1)), np.random.random((1, 1)), config)
         mlp.add_input_layer(data["input"])
 
         for i in range(len(layers)):
-            activation = from_str(layers[i]["activator"])
+            activation = activators.from_str(layers[i]["activator"])
             n = layers[i]["n"]
             W = np.array(layers[i]["W"])
             b = np.array(layers[i]["b"])
@@ -35,6 +38,7 @@ class ModelManager:
     
     def export_model(mlp: MultiLayer, file_path: str):
         data = dict()
+        data["loss"] = mlp.config.loss.name
         data["input"] = mlp.layers[0].data.n
         data["dense"] = list()
         for layer in mlp.dense_layers:

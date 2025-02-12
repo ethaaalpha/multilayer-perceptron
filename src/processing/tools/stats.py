@@ -6,6 +6,8 @@ class Stats:
         self.config = config
         self.temp = dict()
         self.data = dict()
+        self.counter = 1
+        self.indices = np.arange(self.config.number_epoch)
 
     def register(self, name, value):
         if self.temp.get(name) == None:
@@ -18,11 +20,22 @@ class Stats:
         self.data[name].append(self.temp[name] / ratio)
         self.temp[name] = None
 
-    def display(self):
-        indices = np.arange(self.config.number_epoch)
+    def epoch(self):
+        data = ", ".join([f"{k}:{v[-1]:.5f}" for k, v in self.data.items()])
+        print(f"epoch {self.counter}: {data}")
+        self.counter += 1
 
-        for k, v in self.data.items():
-            pp.plot(indices, v, label=k)
-        pp.ylim(0, 1) # it's better
+    def fig(self, title: str, y_label: str, keys: list):
+        fig = pp.figure(str(keys))
+        fig.suptitle(title)
+
+        for k in keys:
+            pp.plot(self.indices, self.data[k], label=k)
+        pp.ylabel(y_label)
+        pp.xlabel("epochs")
+        pp.grid()
         pp.legend()
+        pp.ylim(0, 1)
+
+    def display(self):
         pp.show()

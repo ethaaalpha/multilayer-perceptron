@@ -14,8 +14,9 @@ class AbstractLoss(ABC):
     def apply_derivative(self, A, Y):
         pass
 
-    def preprocessing(self, Y) -> np.array:
-        return Y
+    @abstractmethod
+    def accuracy(self, A, Y):
+        pass
 
 class BCE(AbstractLoss):
     """Binary Cross Entropy"""
@@ -23,6 +24,8 @@ class BCE(AbstractLoss):
         super().__init__("Binary Cross Entropy")
 
     def apply(self, A, Y):
+        epsilon = 1e-15 # avoid log(0)
+        A = np.clip(A, epsilon, 1 - epsilon)
         return -np.sum(Y * np.log(A) + (1 - Y) * np.log(1 - A))
 
     def apply_derivative(self, A, Y):
@@ -32,9 +35,6 @@ class BCE(AbstractLoss):
         y_pred = np.astype((A > 0.5), int)
         y_true = np.astype(Y, int)
         return np.mean(y_pred == y_true)
-
-    def preprocessing(self, Y):
-        return np.reshape(Y, 1, -1)
 
 class CCE(AbstractLoss):
     """
@@ -57,18 +57,6 @@ class CCE(AbstractLoss):
         y_true = np.argmax(Y, axis=0)
         return np.mean(y_pred == y_true)
 
-    def preprocessing(self, Y):
-        return self.___hot_encode(Y)
-
-    def ___hot_encode(self, Y):
-        """HotEncode Y to be usable with softmax"""
-        # https://fr.wikipedia.org/wiki/Encodage_one-hot
-        classes = np.unique(Y)
-        result = np.zeros(((len(Y), len(classes))))
-        for i, value in enumerate(Y):
-            result[i, np.where(classes == value)] = 1
-        return result.T
-    
 def from_str(name) -> AbstractLoss:
     match (name):
         case "Binary Cross Entropy":
