@@ -51,3 +51,4 @@ class ModelManager:
             data["dense"].append(layer_data)
 
         export_to_file(data, file_path)
+        print(f"model exported to {file_path}")

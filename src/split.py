@@ -29,8 +29,8 @@ def dist_parsing(value):
 def main():
     parser = ArgumentParser()
     parser.add_argument("file", help="the raw dataset to be splitted")
-    parser.add_argument("--seed", help="a random int used as random seed for splitting", type=int)
-    parser.add_argument("--dist", help="float value defining the training distribution (ex=0.8; for 80% training, 20% validation)", type=dist_parsing, default=0.8)
+    parser.add_argument("--seed", type=int, help="a random int used as random seed for splitting")
+    parser.add_argument("--dist", type=dist_parsing, default=0.8, help="float value defining the training distribution (ex=0.8; for 80%% training, 20%% validation)")
 
     args = parser.parse_args()
     if (args.seed):

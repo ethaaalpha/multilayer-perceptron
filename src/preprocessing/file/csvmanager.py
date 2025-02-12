@@ -19,11 +19,7 @@ class CSVManager:
                             print("Failed to convert value to float, appending 1 instead!")
                             line.append(1)
                     else:
-                        # transform M and B to 0 and 1 (y values)
-                        if (row[i] == 'M'):
-                            line.append(0)
-                        else:
-                            line.append(1)
+                        line.append(row[i])
                 result.append(line)
         return DataSet(result)
 

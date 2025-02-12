@@ -18,7 +18,7 @@ def main():
     validation_data = scaler.scale_data(validation_dataset, HotEncoder())
 
     temp = 0.06
-    config = ModelConfiguration(number_epoch=5000, loss=BCE())
+    config = ModelConfiguration(number_epoch=200, loss=BCE())
 
     mlp: MultiLayer = MultiLayer(training_data[0], training_data[1], config)
     mlp.add_input_layer(30)
@@ -28,6 +28,7 @@ def main():
     mlp.learn(validation_data)
 
     ModelManager.export_model(mlp, "model.json")
+    mlp.stats.display()
 
 if __name__ == "__main__":
     main()

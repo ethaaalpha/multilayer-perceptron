@@ -102,14 +102,11 @@ class MultiLayer(LogicNetwork):
 
         self.stats.fig("Loss Evolution", "loss", ["training_loss", "validation_loss"])
         self.stats.fig("Accuracy Evolution", "accuracy %", ["training_accuracy", "validation_accuracy"])
-        
-        self.stats.display()
 
     def __info(self):
-        return
-        # print(f"config -> batch_size: {self.config.batch_size}, epochs_max: {self.config.number_epoch}, loss: {self.config.loss.name}")
-        # for layer in self.layers:
-            # print(f"layer {layer.data.c}/{self.c} -> size:{layer.data.n}, activator={layer.data.activator.name}")
+        print(f"config -> batch_size: {self.config.batch_size}, epochs_max: {self.config.number_epoch}, loss: {self.config.loss.name}")
+        for layer in self.layers:
+            print(f"layer {layer.data.c}/{self.c} -> size:{layer.data.n}, activator={layer.data.activator.name}")
 
     def __epoch(self, batch_size, validation_data=None):
         indices = np.arange(self.m)
