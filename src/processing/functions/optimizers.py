@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 
 class AbtractOptimizer(ABC):
+    """Abstract class for gradient descent methods"""
     @abstractmethod
     def getW(self, W, dW):
         pass
@@ -9,7 +10,7 @@ class AbtractOptimizer(ABC):
     def getB(self, b, dB):
         pass
 
-class GradientDescent(AbtractOptimizer):
+class Stochastic(AbtractOptimizer):
     def __init__(self, learning_rate):
         self.learning_rate = learning_rate
 

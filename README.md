@@ -223,3 +223,6 @@ refaire les explications pour la dérivée dZ qui vaut A - Y pour bce et cee
 cross validation avec kfold
 
 tester si le fichier est vide
+
+
+https://www.youtube.com/watch?v=NE88eqLngkg&t=422s explication avec les differents algorithme d'optimisation possibles

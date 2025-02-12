@@ -5,7 +5,7 @@ from preprocessing.encoders import HotEncoder
 from processing.multilayer import MultiLayer, ModelConfiguration
 from processing.tools.model_manager import ModelManager
 from processing.functions.activators import Sigmoide, SoftMax
-from processing.functions.optimizers import GradientDescent
+from processing.functions.optimizers import Stochastic
 from processing.functions.initializers import He_Uniform
 from processing.functions.losses import *
 
@@ -22,9 +22,9 @@ def main():
 
     mlp: MultiLayer = MultiLayer(training_data[0], training_data[1], config)
     mlp.add_input_layer(30)
-    mlp.add_dense_layer(80, activator=Sigmoide(), initializer=He_Uniform(), optimizer=GradientDescent(temp))
-    mlp.add_dense_layer(40, activator=Sigmoide(), initializer=He_Uniform(), optimizer=GradientDescent(temp))
-    mlp.add_output_layer(2, activator=SoftMax(), initializer=He_Uniform(), optimizer=GradientDescent(temp))
+    mlp.add_dense_layer(80, activator=Sigmoide(), initializer=He_Uniform(), optimizer=Stochastic(temp))
+    mlp.add_dense_layer(40, activator=Sigmoide(), initializer=He_Uniform(), optimizer=Stochastic(temp))
+    mlp.add_output_layer(2, activator=SoftMax(), initializer=He_Uniform(), optimizer=Stochastic(temp))
     mlp.learn(validation_data)
 
     ModelManager.export_model(mlp, "model.json")
