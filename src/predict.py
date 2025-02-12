@@ -10,7 +10,9 @@ def load_data(file_path: str):
 
 def predict(mlp: MultiLayer, X):
     mlp._forward(X)
-    print(np.argmax(mlp.layers[-1].A, axis=0))
+    result = np.argmax(mlp.layers[-1].A, axis=0) # for softmax
+    for index, v in enumerate(result):
+        print(f"data {index + 1}: {"M" if v == 0 else "B"}")
 
 def main():
     scaler = Z_score()

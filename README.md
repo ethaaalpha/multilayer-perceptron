@@ -192,9 +192,16 @@ $W^{[c]}\in\mathbb{R}^{n^{[c]}*n^{[c-1]}}$
 $b^{[c]}\in\mathbb{R}^{n^{[c]}*1}$  
 $A^{[c]},Z^{[c]}\in\mathbb{R}^{n^{[c]}*m}$  
 
-ajouter dans le fichier actionvations -> derivative
+## Next
 
-mettre les tailles des matrices (pour vérifier)
+### Mini batch / Batch
+This technique is used divide the epoch in training on differents part of the dataset determined by a *batch size*.  
+
+### Statistiques
+The accuracy and loss on the training/validation phase help us determine when the model is ready.  
+
+### Preprocessing
+For preparing our data where using the **z-score** standardization but there are many others techniques like **min-max** normalization.  
 
 PCA pour visualiser
 
@@ -214,7 +221,5 @@ https://developers.google.com/machine-learning/crash-course?hl=fr
 refaire les explications pour la dérivée dZ qui vaut A - Y pour bce et cee
 
 cross validation avec kfold
-
-voir pour faire une interface InterfaceLayer
 
 tester si le fichier est vide
