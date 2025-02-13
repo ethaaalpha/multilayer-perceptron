@@ -1,6 +1,6 @@
 from processing.functions.activators import AbstractActivator, Sigmoide
 from processing.functions.initializers import AbstractInitializer, Auto
-from processing.functions.optimizers import AbtractOptimizer, Stochastic
+from processing.functions.optimizers import AbtractOptimizer, SGD
 from processing.functions.losses import AbstractLoss
 from dataclasses import dataclass
 from abc import ABC, abstractmethod
@@ -14,7 +14,7 @@ class LayerData:
     m: int = 1
     activator: AbstractActivator = Sigmoide()
     initializer: AbstractInitializer = Auto()
-    optimizer: AbtractOptimizer = Stochastic()
+    optimizer: AbtractOptimizer = SGD()
 
     def generate_weights(self) -> tuple[np.array, np.array]:
         W = self.initializer.generate((self.n, self.n_before), self.n)
