@@ -197,32 +197,26 @@ $A^{[c]},Z^{[c]}\in\mathbb{R}^{n^{[c]}*m}$
 ### Mini batch / Batch
 This technique is used divide the epoch in training on differents part of the dataset determined by a *batch size*.  
 
-### Statistiques
+### Statistics
 The accuracy and loss on the training/validation phase help us determine when the model is ready.  
 
 ### Preprocessing
 For preparing our data where using the **z-score** standardization but there are many others techniques like **min-max** normalization.  
 
-PCA pour visualiser
+## Resources
+- [Google ML](https://developers.google.com/machine-learning/crash-course?hl=fr)
+- [Optimizers](https://www.youtube.com/watch?v=NE88eqLngkg)
+- [Perceptron Concept & Maths explanations](https://www.youtube.com/@MachineLearnia)
+- [Early Stopping](https://en.wikipedia.org/wiki/Early_stopping)
+
+#### See also
+- [Cross Validation](https://fr.wikipedia.org/wiki/Validation_crois%C3%A9e)
+- [Kfold Validation](https://www.datacamp.com/fr/tutorial/k-fold-cross-validation)
+- [Box plot](https://en.wikipedia.org/wiki/Box_plot)
+- [PCA](https://en.wikipedia.org/wiki/Principal_component_analysis)
 
 adam optimizer
 
-function coût
-
-principe d'un early stoping.   
-si loss n'évolue sur plusieurs epoch. 
-
-faire une boite a moustache
-
-batch descent gradient vs stochastict gradient descent
-
-https://developers.google.com/machine-learning/crash-course?hl=fr
-
 refaire les explications pour la dérivée dZ qui vaut A - Y pour bce et cee
 
-cross validation avec kfold
-
 tester si le fichier est vide
-
-
-https://www.youtube.com/watch?v=NE88eqLngkg&t=422s explication avec les differents algorithme d'optimisation possibles

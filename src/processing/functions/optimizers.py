@@ -11,7 +11,7 @@ class AbtractOptimizer(ABC):
         pass
 
 class Stochastic(AbtractOptimizer):
-    def __init__(self, learning_rate):
+    def __init__(self, learning_rate = 0.001):
         self.learning_rate = learning_rate
 
     def getW(self, W, dW):
