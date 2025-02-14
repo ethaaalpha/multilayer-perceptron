@@ -215,8 +215,4 @@ For preparing our data where using the **z-score** standardization but there are
 - [Box plot](https://en.wikipedia.org/wiki/Box_plot)
 - [PCA](https://en.wikipedia.org/wiki/Principal_component_analysis)
 
-adam optimizer
-
-refaire les explications pour la dérivée dZ qui vaut A - Y pour bce et cee
-
-tester si le fichier est vide
+-> redo explanation on dZ becoming A - Y (for bce and cce)
