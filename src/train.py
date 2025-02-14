@@ -17,15 +17,15 @@ def main():
     training_data = scaler.scale_data(training_dataset, HotEncoder())
     validation_data = scaler.scale_data(validation_dataset, HotEncoder())
 
-    temp = 0.03
-    config = ModelConfiguration(number_epoch=200, loss=BCE())
+    lr = 0.0314
+    config = ModelConfiguration(number_epoch=84, loss=BCE())
 
     mlp: MultiLayer = MultiLayer(training_data[0], training_data[1], config)
     mlp.add_input_layer(30)
-    mlp.add_dense_layer(24, activator=Sigmoide(), initializer=He_Uniform(), optimizer=SGDNesterovMomentum(temp))
-    mlp.add_dense_layer(24, activator=Sigmoide(), initializer=He_Uniform(), optimizer=SGDNesterovMomentum(temp))
-    mlp.add_dense_layer(24, activator=Sigmoide(), initializer=He_Uniform(), optimizer=SGDNesterovMomentum(temp))
-    mlp.add_output_layer(2, activator=SoftMax(), initializer=He_Uniform(), optimizer=SGDNesterovMomentum(temp))
+    mlp.add_dense_layer(24, activator=Sigmoide(), initializer=He_Uniform(), optimizer=SGDNesterovMomentum(lr))
+    mlp.add_dense_layer(24, activator=Sigmoide(), initializer=He_Uniform(), optimizer=SGDNesterovMomentum(lr))
+    mlp.add_dense_layer(24, activator=Sigmoide(), initializer=He_Uniform(), optimizer=SGDNesterovMomentum(lr))
+    mlp.add_output_layer(2, activator=SoftMax(), initializer=He_Uniform(), optimizer=SGDNesterovMomentum(lr))
     mlp.learn(validation_data)
 
     ModelManager.export_model(mlp, "model.json")
