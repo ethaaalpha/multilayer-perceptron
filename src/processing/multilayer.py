@@ -135,4 +135,3 @@ class MultiLayer(LogicNetwork):
         self.stats.register("validation_accuracy", self.config.loss.accuracy(A, Y_val))
         self.stats.save("validation_loss", len(X_val[0]))
         self.stats.save("validation_accuracy", 1)
-

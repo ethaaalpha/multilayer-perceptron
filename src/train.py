@@ -5,7 +5,7 @@ from preprocessing.encoders import HotEncoder
 from processing.multilayer import MultiLayer, ModelConfiguration
 from processing.tools.model_manager import ModelManager
 from processing.functions.activators import Sigmoide, SoftMax
-from processing.functions.optimizers import SGD, SGDNesterovMomentum, RMSprop, Adam
+from processing.functions.optimizers import Adam
 from processing.functions.initializers import He_Uniform
 from processing.functions.losses import *
 

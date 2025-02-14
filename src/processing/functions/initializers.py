@@ -3,11 +3,11 @@ import numpy as np
 
 class AbstractInitializer(ABC):
     @abstractmethod
-    def generate(self, shape, n):
+    def generate(self, *args):
         pass
 
 class Auto(AbstractInitializer):
-    def generate(self, shape, n):
+    def generate(self, shape):
         return np.random.rand(*shape)
 
 class He_Uniform(AbstractInitializer):

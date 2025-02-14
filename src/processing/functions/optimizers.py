@@ -77,7 +77,6 @@ class RMSprop(AbtractOptimizer):
 
 class Adam(AbtractOptimizer):
     """Adam"""
-
     def __init__(self, learning_rate = 0.001, beta_1 = 0.9, beta_2 = 0.999):
         self.learning_rate = learning_rate
         self.velocity_w = 0
