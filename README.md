@@ -186,11 +186,11 @@ $dW^{[c]}= \frac{1}{m} dZ^{[c]} \cdot A^{[c-1]^{T}}$
 $db^{[c]}=\frac{1}{m}\sum{dZ^{[c]}}$  
 
 ##### Final matrix dimensions (helpful)
-$X\in\mathbb{R}^{n^{[0]}*m}$  
-$Y\in\mathbb{R}^{1*m}$<br><br>
-$W^{[c]}\in\mathbb{R}^{n^{[c]}*n^{[c-1]}}$  
-$b^{[c]}\in\mathbb{R}^{n^{[c]}*1}$  
-$A^{[c]},Z^{[c]}\in\mathbb{R}^{n^{[c]}*m}$  
+$`X\in\mathbb{R}^{n^{[0]}*m}`$  
+$`Y\in\mathbb{R}^{1*m}`$<br><br>
+$`W^{[c]}\in\mathbb{R}^{n^{[c]}*n^{[c-1]}}`$  
+$`b^{[c]}\in\mathbb{R}^{n^{[c]}*1}`$  
+$`A^{[c]},Z^{[c]}\in\mathbb{R}^{n^{[c]}*m}`$  
 
 ## Next
 
