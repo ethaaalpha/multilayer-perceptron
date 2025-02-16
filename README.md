@@ -208,11 +208,10 @@ For preparing our data where using the **z-score** standardization but there are
 - [Optimizers](https://www.youtube.com/watch?v=NE88eqLngkg)
 - [Perceptron Concept & Maths explanations](https://www.youtube.com/@MachineLearnia)
 - [Early Stopping](https://en.wikipedia.org/wiki/Early_stopping)
+- [Neural Network From Scratch](https://www.youtube.com/watch?v=w8yWXqWQYmU)
 
 #### See also
 - [Cross Validation](https://fr.wikipedia.org/wiki/Validation_crois%C3%A9e)
 - [Kfold Validation](https://www.datacamp.com/fr/tutorial/k-fold-cross-validation)
 - [Box plot](https://en.wikipedia.org/wiki/Box_plot)
 - [PCA](https://en.wikipedia.org/wiki/Principal_component_analysis)
-
--> redo explanation on dZ becoming A - Y (for bce and cce)
