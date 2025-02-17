@@ -7,7 +7,6 @@ class Stats:
         self.temp = dict()
         self.data = dict()
         self.counter = 1
-        self.indices = np.arange(self.config.number_epoch)
 
     def register(self, name, value):
         if self.temp.get(name) == None:
@@ -25,12 +24,12 @@ class Stats:
         print(f"epoch {self.counter}: {data}")
         self.counter += 1
 
-    def fig(self, title: str, y_label: str, keys: list):
+    def fig(self, title: str, y_label: str, keys: list, n_epochs: int):
         fig = pp.figure(str(keys))
         fig.suptitle(title)
 
         for k in keys:
-            pp.plot(self.indices, self.data[k], label=k)
+            pp.plot(np.arange(n_epochs), self.data[k], label=k)
         pp.ylabel(y_label)
         pp.xlabel("epochs")
         pp.grid()
@@ -39,3 +38,36 @@ class Stats:
 
     def display(self):
         pp.show()
+
+    def is_early_stop(self) -> bool:
+        patience = 0
+        max_patience = 3
+        sigma = 0.01 
+
+        def condition():
+            nonlocal patience
+            validation_loss = self.data.get("validation_loss")
+            training_loss = self.data.get("training_loss")
+            training_accuracy = self.data.get("training_accuracy")
+            validation_accuracy = self.data.get("validation_accuracy")
+
+            if (self.counter > 2):
+                if (validation_loss[-1] > validation_loss[-2]):
+                    return True
+                elif (training_loss[-1] > training_loss[-2]):
+                    patience += 1
+                elif (training_accuracy[-1] > training_accuracy[-2]):
+                    patience += 1
+                elif (validation_accuracy[-1] > validation_accuracy[-2]):
+                    patience += 1
+                elif (abs(validation_accuracy[-1] - validation_accuracy[-2]) <= sigma):
+                    patience += 1
+                elif (abs(training_accuracy[-1] - training_accuracy[-2]) <= sigma):
+                    patience += 1
+                else:
+                    patience = 0
+                
+                return patience > max_patience
+            else:
+                return False
+        return condition()

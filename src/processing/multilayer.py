@@ -92,16 +92,20 @@ class MultiLayer(LogicNetwork):
             n_before = self.layers[-1].data.n
             self._append_layer(OutputLayer(size, self.c, n_before, self.m, **kwargs))
 
-    def learn(self, validation_data=None):
+    def learn(self, validation_data=None, early_stop=False):
         if (self.c < 2 or not any(isinstance(layer, OutputLayer) for layer in self.layers)):
             raise ValueError("You must have an input layer, hidden layer(s) and an output layer!")
+        n_epochs = 0
         self.__info()
 
         for _ in range(self.config.number_epoch):
             self.__epoch(self.config.batch_size, validation_data)
+            n_epochs += 1
+            if early_stop and self.stats.is_early_stop():
+                break
 
-        self.stats.fig("Loss Evolution", "loss", ["training_loss", "validation_loss"])
-        self.stats.fig("Accuracy Evolution", "accuracy %", ["training_accuracy", "validation_accuracy"])
+        self.stats.fig("Loss Evolution", "loss", ["training_loss", "validation_loss"], n_epochs)
+        self.stats.fig("Accuracy Evolution", "accuracy %", ["training_accuracy", "validation_accuracy"], n_epochs)
 
     def __info(self):
         print(f"config -> batch_size: {self.config.batch_size}, epochs_max: {self.config.number_epoch}, loss: {self.config.loss.name}")
