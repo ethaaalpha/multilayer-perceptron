@@ -1,4 +1,5 @@
 # Multilayer-perceptron
+The multilayer-perceptron is a project where you discover how to build you own neural network with multi-layers and multiples-neurons.  
 
 ## Perceptron (simple neuron)
 
@@ -7,25 +8,25 @@
 #### Linear model function
 $` z(x_1, x_2)=x_1*w_1 + x_2*w_2 + b `$  
 Where :
-- $x_1$ and $x_2$ are data passed to the fonction (from the data).  
-- $w_1$ and $w_2$ are weights determined during the learning phase to make a parameter more important than an another
-- $b$ the bias is also determined during the leanrning phase to make the program able to shift to the activation fonction [here](https://stackoverflow.com/questions/2480650/what-is-the-role-of-the-bias-in-neural-networks)  
+- $x_1$ and $x_2$ are parameters gived to the fonction (from the data).  
+- $w_1$ and $w_2$ are weights determined during the learning phase to make a parameter more important than an another.
+- $b$ the bias is also determined during the leanrning phase to make the program able to shift the activation fonction [here](https://stackoverflow.com/questions/2480650/what-is-the-role-of-the-bias-in-neural-networks)  
 
 The result of this function tell us on which side of the data we are (logistic regression).  
-If it is positive we are on the right side of the fonction, if it is negative on the left side.  
+If it is positive, we are on the right side of the fonction, then if it's negative the left side.  
 
 <img src="doc/img/linear_function.png" width=500>
 
 #### Activation function
 The activation function is used to convert the result of $z$ to a probability.  
-There are multiple activations functions but in this case we use the [**sigmoide**](https://en.wikipedia.org/wiki/Sigmoid_function).  
+There are multiples activations functionsm but in this case we use the [**sigmoide**](https://en.wikipedia.org/wiki/Sigmoid_function).  
 
 $a(z)=\frac{1}{1+e^-z}$  
 
 <img src="doc/img/sigmoide.png" width=500>
 
 #### Log Loss function
-The function to calculate likelihood of our model is represented by $L=\prod_{i=1}^m a_{i}^{a_y}*(1-a_i)^{1-y_i}$, it is the sum of your probabilities.  
+The function to calculate likelihood of our model is represented by $L=\prod_{i=1}^m a_{i}^{a_y}*(1-a_i)^{1-y_i}$ it is the sum of your probabilities.  
 The issue is that the number will tend towards 0 due to the multiplication of a number between [0, 1].  
 To avoid this problem, we will use the $\log$ and use [logarithms](https://en.wikipedia.org/wiki/Logarithm) attributes.  
 If apply the log, expand and simplify this function it will be $LL$
