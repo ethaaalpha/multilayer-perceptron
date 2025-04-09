@@ -11,8 +11,8 @@ class AbtractOptimizer(ABC):
     def getB(self, b, dB):
         pass
 
-class SGD(AbtractOptimizer):
-    """Stochastic Gradient Descent"""
+class GD(AbtractOptimizer):
+    """Gradient Descent"""
     def __init__(self, learning_rate = 0.001):
         self.learning_rate = learning_rate
 
@@ -22,8 +22,8 @@ class SGD(AbtractOptimizer):
     def getB(self, b, dB):
         return b - self.learning_rate * dB
 
-class SGDMomentum(AbtractOptimizer):
-    """SGD with Momentum"""
+class GDMomentum(AbtractOptimizer):
+    """GD with Momentum"""
     def __init__(self, learning_rate = 0.001, momentum=0.9):
         self.learning_rate = learning_rate
         self.velocity_w = 0
@@ -38,8 +38,8 @@ class SGDMomentum(AbtractOptimizer):
         self.velocity_b = self.momentum * self.velocity_b + self.learning_rate * dB
         return b - self.velocity_b
 
-class SGDNesterovMomentum(AbtractOptimizer):
-    """SGD with Nesterov Momentum"""
+class GDNesterovMomentum(AbtractOptimizer):
+    """GD with Nesterov Momentum"""
     def __init__(self, learning_rate = 0.001, momentum=0.9):
         self.learning_rate = learning_rate
         self.velocity_w = 0
