@@ -15,7 +15,7 @@ def predict(mlp: MultiLayer, X, Y, raw):
     A = mlp.layers[-1].A
 
     print("## informations ##")
-    print(f"loss: {mlp.stats.data["validation_loss"][0]}, accuracy: {mlp.stats.data["validation_accuracy"][0]}")
+    print(f'loss: {mlp.stats.data["validation_loss"][0]}, accuracy: {mlp.stats.data["validation_accuracy"][0]}')
     print("##    result    ##")
 
     result = np.argmax(A, axis=0) # for softmax

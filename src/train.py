@@ -26,7 +26,7 @@ def main():
     mlp.add_dense_layer(24, activator=Sigmoide(), initializer=He_Uniform(), optimizer=Adam(lr))
     mlp.add_dense_layer(24, activator=Sigmoide(), initializer=He_Uniform(), optimizer=Adam(lr))
     mlp.add_output_layer(2, activator=SoftMax(), initializer=He_Uniform(), optimizer=Adam(lr))
-    mlp.learn(validation_data)
+    mlp.learn(validation_data, early_stop=True)
 
     ModelManager.export_model(mlp, "model.json")
     mlp.stats.display()
