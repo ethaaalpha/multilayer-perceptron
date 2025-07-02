@@ -23,7 +23,7 @@ def predict(mlp: MultiLayer, X, Y, raw):
         print(result)
     else:
         result = np.where(result == 0, 'M', result)
-        result = np.where(result == '1', 'B', result)
+        result = np.where(result == 1, 'B', result)
         print(result)
 
 def main():
